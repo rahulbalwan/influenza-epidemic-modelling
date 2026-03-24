@@ -1,6 +1,30 @@
-# influenza-epidemic-modelling
+# Influenza Epidemic Modelling
 
-Reproducible epidemic data analysis and transmission modelling of influenza using weekly surveillance data, including growth-rate estimation, season comparison, and compartmental modelling in R.
+This project aims to analyse and model the transmission dynamics of influenza using weekly surveillance data.
+
+The project is designed as a reproducible epidemiological analysis pipeline in R, combining data cleaning, exploratory analysis, epidemic growth estimation, and compartmental modelling.
+
+---
+
+## Objectives
+
+- Explore influenza trends across multiple seasons
+- Analyse epidemic growth phases
+- Estimate growth rates and reproduction numbers
+- Develop compartmental models (SEIR and SIRS)
+- Perform sensitivity analysis
+- Build an interactive Shiny dashboard
+
+---
+
+## Data
+
+Data is sourced from WHO FluNet:
+
+- Weekly influenza surveillance data
+- United Kingdom
+- Time period: 2015–2026
+
 
 ## Project structure
 
