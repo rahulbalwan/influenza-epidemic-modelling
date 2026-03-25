@@ -25,6 +25,13 @@ Data is sourced from WHO FluNet:
 - United Kingdom
 - Time period: 2015–2026
 
+At the current stage, the main outcome being used is:
+- weekly influenza positive detections
+
+## Note on the data
+The raw FluNet extract contains both weekly positive detections and a field for processed specimens. However, these two variables were not internally consistent enough in the workflow to produce a reliable positivity measure, since positive counts often exceeded reported processed counts in the cleaned weekly totals.
+For that reason, the current analysis is based primarily on:
+- weekly influenza positive detections rather than positivity rates.
 
 ## Project structure
 
@@ -39,9 +46,25 @@ Data is sourced from WHO FluNet:
 - `docs/` assumptions, sources, and notes
 - `report/` report drafts or summaries
 
+--
+
+At current stage, the main scripts in use are:
+- scripts/00_setup.R
+- scripts/01_download_data.R
+- scripts/02_clean_data.R
+
+## Status
+This repsoitory is currently under active development
+
+After pasting it, run:
+
+
 ## Run order
 
 The full workflow will be run from:
 
 ```r
 source("run_all.R")
+
+
+
