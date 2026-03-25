@@ -45,9 +45,8 @@ For that reason, the current analysis is based primarily on:
 - `output/models/` model outputs
 - `docs/` assumptions, sources, and notes
 - `report/` report drafts or summaries
-- `app.R` The Shiny dashboard is planned but is not yet implemented. The current project stage focuses on data cleaning and exploratory analysis.
-- Note: The `output/` folder is not tracked in Git, as it contains generated results that can be reproduced by running the scripts.
-
+- `app.R` The Shiny dashboard is planned but is not yet implemented. 
+- Note: The `output/` folder is not tracked in Git. 
 
 At current stage, the main scripts in use are:
 - scripts/00_setup.R
