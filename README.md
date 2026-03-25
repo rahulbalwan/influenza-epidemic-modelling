@@ -54,9 +54,7 @@ At current stage, the main scripts in use are:
 - scripts/02_clean_data.R
 
 ## Status
-This repsoitory is currently under active development
-
-After pasting it, run:
+This repository is currently under active development
 
 
 ## Run order
@@ -65,6 +63,4 @@ The full workflow will be run from:
 
 ```r
 source("run_all.R")
-
-
 
