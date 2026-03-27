@@ -114,3 +114,100 @@ This indicated that:
   - compare epidemic waves across seasons
   - identify growth phases
 
+
+### Exploratory analysis
+## Goal
+Understand the temporal structure and seasonal dynamics of influenza epidemics using the cleaned weekly dataset.
+
+## What I did
+- Loaded the cleaned dataset (flu_clean.csv)
+- Created an influenza season variable:
+- Defined seasons as spanning from week 40 to week 20 of the following year
+- Example: 2019–2020 season
+- Generated multiple visualisations using ggplot2:
+- Full time series plot (2015–2026)
+- Seasonal overlay plot (multiple seasons on same axis)
+- Faceted plots (one panel per season)
+
+## Purpose of visualisations
+
+Each plot served a different analytical purpose:
+
+- Time series plot
+ - To observe long-term trends and disruptions
+ - To identify overall epidemic patterns
+- Seasonal overlay
+ - To compare epidemic magnitude across years
+ - To identify variability in peak size and timing
+- Faceted seasonal plots
+ - To isolate individual epidemic curves
+ - To examine within-season dynamics clearly
+
+## Key observations
+
+Several important epidemiological patterns emerged:
+
+- Strong seasonality
+ - Influenza epidemics occur predominantly during winter months
+- Repeated epidemic structure
+ - Each season follows a characteristic pattern:
+  - gradual increase
+  - peak incidence
+  - decline
+- Heterogeneity across seasons
+ - Large variation in:
+  - peak magnitude
+  - epidemic duration
+  - rate of increase
+- COVID-19 disruption
+ - Marked reduction in influenza activity during 2020–2021
+ - Likely due to behavioural and public health interventions
+- Recent resurgence
+ - Post-pandemic seasons show unusually high peaks
+
+## Interpretation
+
+The data suggests that:
+
+- Influenza should not be treated as a single continuous time series
+- Instead, it is better understood as a sequence of independent epidemic events
+
+Each season represents:
+
+- a distinct outbreak
+- with its own transmission dynamics
+
+## Conceptual insight
+
+This step led to an important shift in perspective:
+
+- The dataset is not just a time series
+- It is a collection of epidemic curves
+
+This has direct implications for modelling:
+
+- Fitting one model across all years would be inappropriate
+- Analysis should focus on:
+ - individual seasons
+ - specific epidemic phases (especially early growth)
+
+## Limitations identified
+- Surveillance intensity varies across time
+- Data reflects reported detections, not true incidence
+- Changes in testing or reporting may affect observed patterns
+
+## Outcome
+- Established a clear understanding of:
+ - epidemic timing
+ - seasonal variation
+ - structural patterns in the data
+- Identified suitable segments of data for modelling:
+ - early epidemic growth phases
+
+## Transition to next step
+
+The next step is to move from visual exploration to quantitative analysis:
+
+- Identify exponential growth phases
+- Estimate growth rate (r)
+- Relate growth dynamics to mechanistic models (SIR/SIRS)
