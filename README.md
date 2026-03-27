@@ -2,49 +2,48 @@
 
 This project analyses and models the transmission dynamics of influenza using weekly surveillance data from the United Kingdom.
 
-It is structured as a **reproducible epidemiological analysis pipeline in R**, covering data ingestion, cleaning, exploratory analysis, epidemic growth estimation, and compartmental modelling.
+The work is structured as a **reproducible epidemiological analysis pipeline in R**, covering:
+
+- data acquisition and cleaning  
+- exploratory analysis  
+- epidemic growth estimation  
+- compartmental modelling (SIR/SIRS/SEIR)  
+- sensitivity analysis  
+- (planned) interactive Shiny dashboard  
 
 ---
 
 ## Objectives
 
-* Explore influenza trends across multiple seasons
-* Analyse epidemic growth phases
-* Estimate growth rates and reproduction numbers
-* Develop compartmental models (SEIR and SIRS)
-* Perform sensitivity analysis
-* Build an interactive Shiny dashboard
+- Explore influenza trends across multiple seasons  
+- Understand epidemic structure and seasonal behaviour  
+- Identify epidemic growth phases  
+- Estimate growth rates and reproduction numbers  
+- Develop and analyse compartmental models  
+- Perform sensitivity analysis  
+- Build an interactive Shiny dashboard (planned)  
 
 ---
 
 ## Data
 
-Data is sourced from **WHO FluNet**:
+Data is sourced from WHO FluNet:
 
-* Weekly influenza surveillance data
-* Location: United Kingdom
-* Time period: 2015–2026
+- Weekly influenza surveillance data  
+- Country: United Kingdom  
+- Time period: 2015–2026  
 
-### Outcome variable
+### Key variables used
 
-* Weekly influenza positive detections
-
-### Note on the data
-
-The raw FluNet extract contains both:
-
-* Positive detections
-* Processed specimens
-
-However, these variables were not internally consistent (e.g., positive counts exceeding processed counts in some weeks), making positivity rates unreliable.
-
-Therefore, the current analysis is based on:
-
-* **Weekly influenza positive detections**, rather than derived positivity measures.
+- `iso_year` → epidemiological year  
+- `iso_week` → epidemiological week  
+- `spec_processed_nb` → number of processed specimens  
+- `inf_all` → number of influenza-positive detections  
 
 ---
 
 ## Project structure
+
 
 ```
 project/
@@ -64,7 +63,7 @@ project/
 └── run_all.R         # Master script to run full pipeline
 ```
 
-> ⚠️ Note: The `output/` directory is not tracked in Git and is generated when the pipeline is executed.
+
 
 ---
 
@@ -105,14 +104,21 @@ Current implemented scripts:
 * `scripts/00_setup.R`
 * `scripts/01_download_data.R`
 * `scripts/02_clean_data.R`
+* `scripts/03_exploratory_analysis.R`
 
-Upcoming work:
 
-* Epidemic growth modelling
-* SEIR / SIRS implementation
-* Sensitivity analysis
-* Shiny dashboard
+## Key findings:(EDA)
+* Strong seasonal epidemic patterns
+* Each year behaves as a separate epidemic event
+* Epidemics follow a typical shape:
+ * growth - peak - decline
+* Large variability across seasons
+* COVID-19 period shows suppressed influenza activity
+* Post-pandemic seasons show resurgence
 
+### Conceptual insight:
+
+The dataset represents: a sequence of repeated epidemic processes rather than a single continuous time series
 ---
 
 ## Reproducibility
@@ -124,13 +130,23 @@ The project is designed with reproducibility in mind:
 * Version control using Git
 * Planned integration of automated outputs and dashboards
 
+## Learning notes
+
+Detailed step-by-step reasoning and reflections are documented in:
+
+- docs/learning-journal.md
+
+## Tools used
+- R
+- tidyverse (dplyr, ggplot2, readr)
+- janitor
+- ISOweek
+- zoo
+- deSolve (for modelling)
 ---
 
-## Future extensions
 
-* Real-time epidemic tracking
-* Forecasting models
-* Integration with additional surveillance datasets
-* Interactive visualisation via Shiny
-
----
+## Author
+Rahul 
+- MSc Medical Statistics and Health Data Science, University of Bristol, United Kingdom
+- MSc Statistics, Indian Institute of Technology Kanpur, India
