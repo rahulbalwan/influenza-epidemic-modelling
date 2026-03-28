@@ -1,213 +1,394 @@
 
+# Setup Task
 
-## Project setup
+## Completed:
 
-### Goal
-Set up a clean and reproducible project structure for influenza epidemic modelling.
+* Created a new project folder: `influenza-epidemic-modelling`
+* Initialized Git repository
+* Set up structured project directories:
 
----
+  * `data/raw`, `data/processed`, `data/interim`
+  * `scripts/`, `output/`, `docs/`, `report/`
+* Added `.gitignore`
+* Created initial `README.md`
+* Created `learning-journal.md`
+* Wrote `00_setup.R`:
 
-### What I did
-- Created a GitHub repository: influenza-epidemic-modelling
-- Designed a structured project layout:
-  - data folders (raw, processed, interim)
-  - scripts for analysis
-  - output folders for figures and models
-- Connected local project to GitHub using Git
-- Created initial README and documentation files
-- Wrote and ran the setup script (00_setup.R)
-  - Installed required R packages
-  - Created necessary directories automatically
-
----
-
-### Next step
-- Load and inspect raw influenza data
-- Clean and structure data for analysis
-
-## Data loading and cleaning
-
-### Goal
-Load the raw FluNet data and convert it into a clean, analysis-ready weekly dataset.
+  * installs required R packages
+  * creates directory structure automatically
+* Connected local project to GitHub
 
 ---
 
-### What I did
-- Downloaded influenza surveillance data from WHO FluNet (UK, 2015–2026)
-- Saved the file in `data/raw/`
-- Wrote a script (`01_download_data.R`) to check that the raw file exists
-- Loaded the Excel file using `read_excel()`
-- Cleaned column names using `janitor::clean_names()`
-- Identified key variables:
-  - `iso_year`
-  - `iso_week`
-  - `spec_processed_nb`
-  - `inf_all`
-- Renamed variables to simpler names:
-  - year, week, tested, positive
-- Converted all columns to numeric using `parse_number()`
-- Created a proper weekly date variable using ISO week format
+## Understanding:
 
+* A reproducible workflow requires clear separation of:
+
+  * raw data
+  * processed data
+  * scripts
+  * outputs
+* Git should be used from the beginning to track all changes
+* Epidemiological modelling projects require structured pipelines
+* The workflow will follow:
+
+  * setup → cleaning → exploration → wave detection → growth estimation → modelling
 
 ---
 
-### Issue encountred
-While inspecting the cleaned data, I noticed several problems:
+## Next Step:
 
-- Multiple rows existed for the same week
-- Some rows had:
-  - `tested = 0`
-  - `positive > 0`
-- This resulted in:
-  - `positivity = Inf`
-- After aggregating weekly totals, I still observed:
-  - `positive > tested`
-  - positivity values greater than 1
-
-This indicated that:
-
-- The dataset was not structured as one row per week
-- The variables `tested` and `positive` were not directly compatible
-- The positivity measure was not reliable in this dataset
+* Load and inspect raw influenza data
+* Identify key variables and structure
 
 ---
 
-### How I solved it
+# Data Loading & Inspection Task
 
-- Aggregated the data by week:
-  - summed `tested` and `positive` for each week
-- Recomputed weekly totals correctly
-- Identified that positivity was still not meaningful due to inconsistencies in the source data
-- Decided to **remove positivity from the analysis**
-- Kept:
-  - weekly influenza positive detections as the main outcome variable
+## Completed:
 
----
+* Downloaded influenza data from WHO FluNet (UK, 2015–2026)
+* Saved dataset in `data/raw/flunet_uk.xlsx`
+* Created `01_download_data.R` to validate file existence
+* Loaded data using `read_excel()`
+* Cleaned column names using `janitor::clean_names()`
+* Inspected:
 
-### Key learning
-
-- Real-world epidemiological data is often messy and not analysis-ready
-- Variables that seem logically related (tested vs positive) may not be directly comparable
-- Always check:
-  - duplicate rows
-  - impossible values (e.g., positivity > 1)
-- Aggregation is often necessary before analysis
-- It is important to question the meaning of variables, not just process them mechanically
+  * column names
+  * structure
+  * key variables
 
 ---
 
-### Outcome
+## Observations:
 
-- Created a clean weekly influenza dataset:
-  - one row per week
-  - consistent time variable
-  - reliable outcome variable (positive cases)
-- Saved cleaned data to:
-  - `data/processed/flu_clean.csv`
+* Dataset contains weekly influenza surveillance data
+* Key variables identified:
+
+  * `iso_year`, `iso_week`
+  * `spec_processed_nb` (tested)
+  * `inf_all` (positive)
+* Multiple rows exist per week
+* Data is not structured as one observation per time point
+* Variables may come from multiple reporting sources
 
 ---
 
-### Next step
+## Understanding:
 
-- Perform exploratory analysis:
-  - plot influenza cases over time
-  - compare epidemic waves across seasons
-  - identify growth phases
+* Raw surveillance data is not analysis-ready
+* Data represents reported detections, not true infections
+* Multiple reporting streams may be combined in the dataset
 
+---
 
-### Exploratory analysis
-## Goal
-Understand the temporal structure and seasonal dynamics of influenza epidemics using the cleaned weekly dataset.
+## Next Step:
 
-## What I did
-- Loaded the cleaned dataset (flu_clean.csv)
-- Created an influenza season variable:
-- Defined seasons as spanning from week 40 to week 20 of the following year
-- Example: 2019–2020 season
-- Generated multiple visualisations using ggplot2:
-- Full time series plot (2015–2026)
-- Seasonal overlay plot (multiple seasons on same axis)
-- Faceted plots (one panel per season)
+* Clean and restructure the dataset
+* Convert it into a weekly time series
 
-## Purpose of visualisations
+---
 
-Each plot served a different analytical purpose:
+# Data Cleaning Task
 
-- Time series plot
- - To observe long-term trends and disruptions
- - To identify overall epidemic patterns
-- Seasonal overlay
- - To compare epidemic magnitude across years
- - To identify variability in peak size and timing
-- Faceted seasonal plots
- - To isolate individual epidemic curves
- - To examine within-season dynamics clearly
+## Completed:
 
-## Key observations
+* Created cleaning script `02_clean_data.R`
+* Selected relevant variables:
 
-Several important epidemiological patterns emerged:
+  * year, week, tested, positive
+* Converted all variables to numeric
+* Created weekly date using ISO week format
+* Aggregated data to one row per week
+* Attempted to compute positivity
 
-- Strong seasonality
- - Influenza epidemics occur predominantly during winter months
-- Repeated epidemic structure
- - Each season follows a characteristic pattern:
-  - gradual increase
-  - peak incidence
-  - decline
-- Heterogeneity across seasons
- - Large variation in:
-  - peak magnitude
-  - epidemic duration
-  - rate of increase
-- COVID-19 disruption
- - Marked reduction in influenza activity during 2020–2021
- - Likely due to behavioural and public health interventions
-- Recent resurgence
- - Post-pandemic seasons show unusually high peaks
+---
 
-## Interpretation
+## Observations:
 
-The data suggests that:
+* Multiple rows per week required aggregation
+* Found inconsistencies:
 
-- Influenza should not be treated as a single continuous time series
-- Instead, it is better understood as a sequence of independent epidemic events
+  * `tested = 0` with `positive > 0`
+  * positivity = Inf
+  * positivity > 1
+* Even after aggregation:
 
-Each season represents:
+  * `positive > tested` still occurred
 
-- a distinct outbreak
-- with its own transmission dynamics
+---
 
-## Conceptual insight
+## Understanding:
 
-This step led to an important shift in perspective:
+* `tested` and `positive` are not directly comparable
+* Positivity is not a reliable measure in this dataset
+* Data reflects complex reporting rather than a simple numerator-denominator structure
 
-- The dataset is not just a time series
-- It is a collection of epidemic curves
+---
 
-This has direct implications for modelling:
+## Key Decision:
 
-- Fitting one model across all years would be inappropriate
-- Analysis should focus on:
- - individual seasons
- - specific epidemic phases (especially early growth)
+* Dropped positivity from analysis
+* Selected:
 
-## Limitations identified
-- Surveillance intensity varies across time
-- Data reflects reported detections, not true incidence
-- Changes in testing or reporting may affect observed patterns
+  * **weekly positive detections** as main outcome variable
 
-## Outcome
-- Established a clear understanding of:
- - epidemic timing
- - seasonal variation
- - structural patterns in the data
-- Identified suitable segments of data for modelling:
- - early epidemic growth phases
+---
 
-## Transition to next step
+## Outcome:
 
-The next step is to move from visual exploration to quantitative analysis:
+* Created clean dataset:
 
-- Identify exponential growth phases
-- Estimate growth rate (r)
-- Relate growth dynamics to mechanistic models (SIR/SIRS)
+  * one row per week
+  * consistent time variable
+* Saved to:
+
+  * `data/processed/flu_clean.csv`
+
+---
+
+## Next Step:
+
+* Perform exploratory analysis
+* Understand epidemic patterns
+
+---
+
+# Exploratory Analysis Task
+
+## Completed:
+
+* Created script `03_exploratory_analysis.R`
+* Loaded cleaned dataset
+* Defined influenza seasons:
+
+  * week 40 → week 20 (next year)
+* Generated plots:
+
+  * full time series
+  * seasonal overlay
+  * faceted seasonal plots
+
+---
+
+## Observations:
+
+* Strong seasonal pattern (winter peaks)
+* Each season shows:
+
+  * growth → peak → decline
+* Large variability across years
+* COVID-19 period (2020–2021):
+
+  * very low influenza activity
+* Post-pandemic seasons:
+
+  * unusually high peaks
+
+---
+
+## Understanding:
+
+* Data is not one continuous time series
+* It represents:
+
+  * **repeated seasonal epidemics**
+* Each season behaves like:
+
+  * an independent epidemic event
+
+---
+
+## Key Insight:
+
+* Modelling should not be done on full dataset
+* It should focus on:
+
+  * individual seasons
+  * specific epidemic phases
+
+---
+
+## Next Step:
+
+* Detect and structure epidemic waves
+
+---
+
+# Wave Detection Task
+
+## Completed:
+
+* Created script `04_wave_detection.R`
+* Used seasonal classification
+* Applied smoothing (rolling mean)
+* Visualised epidemic waves
+* Identified peaks for each season
+* Created summary table:
+
+  * peak week
+  * peak date
+  * peak cases
+
+---
+
+## Observations:
+
+* Each season has a distinct epidemic wave
+* Peak magnitude varies widely:
+
+  * very low (2020–2021)
+  * extremely high (2022–2023)
+* Peak timing differs between seasons
+* Some waves are more symmetric than others
+
+---
+
+## Understanding:
+
+* Epidemics occur as:
+
+  * **discrete waves**
+* Each wave represents:
+
+  * a separate transmission process
+* External factors (e.g., COVID) affect wave size and timing
+
+---
+
+## Key Insight:
+
+* The correct unit of analysis is:
+
+  * **epidemic wave**, not full time series
+
+---
+
+## Outcome:
+
+* Structured dataset into seasonal epidemic waves
+* Identified best candidate for modelling:
+
+  * 2022–2023 season
+
+---
+
+## Next Step:
+
+* Estimate growth rate in early epidemic phase
+
+---
+
+# Growth Rate Estimation Task
+
+## Completed:
+
+* Created script `05_growth_rate_estimation.R`
+* Selected 2022–2023 epidemic wave
+* Chose early growth phase manually
+* Applied smoothing (3-week rolling mean)
+* Created:
+
+  * time index
+  * log-transformed cases
+* Fitted model:
+
+  * `log_cases ~ time_index`
+* Generated plots:
+
+  * growth phase
+  * log-linear fit
+* Saved summary table
+
+---
+
+## Observations:
+
+* Growth phase shows increasing trend
+* Log-transformed data shows near-linear relationship
+* Estimated growth rate:
+
+  * **r ≈ 0.215 per week**
+  * **r ≈ 0.0307 per day**
+
+---
+
+## Interpretation:
+
+* Epidemic follows **exponential growth** in early phase
+* Cases increase:
+
+  * ~24% per week
+* Doubling time:
+
+  * ~23 days
+
+---
+
+## Understanding:
+
+* Early epidemic phase approximates:
+  [
+  I(t) = I_0 e^{rt}
+  ]
+* Log transformation allows:
+
+  * linear regression estimation
+* Growth rate reflects:
+
+  * transmission intensity
+
+---
+
+## Key Insight:
+
+* Only early growth phase should be used for estimation
+* Full epidemic curve violates model assumptions
+
+---
+
+## Limitations:
+
+* Growth phase selected manually
+* Small number of observations
+* Results sensitive to window selection
+
+---
+
+## Outcome:
+
+* Successfully estimated epidemic growth rate
+* Established first quantitative epidemic parameter
+
+---
+
+## Next Step:
+
+* Convert growth rate to reproduction number (R)
+* Begin compartmental modelling (SIR / SIRS)
+
+---
+
+# Overall Project Understanding
+
+## Current Status:
+
+* Setup completed
+* Data cleaned and structured
+* Epidemic patterns explored
+* Waves identified
+* Growth rate estimated
+
+---
+
+## Key Conceptual Insight:
+
+* The dataset represents:
+
+  * **a sequence of repeated epidemic processes**
+* Each season:
+
+  * is an independent epidemic
+  * has its own dynamics
+
+---
