@@ -105,6 +105,7 @@ Current implemented scripts:
 * `scripts/01_download_data.R`
 * `scripts/02_clean_data.R`
 * `scripts/03_exploratory_analysis.R`
+* `scripts/04_wave_detection.R`
 
 
 ## Key findings:(EDA)
@@ -116,9 +117,16 @@ Current implemented scripts:
 * COVID-19 period shows suppressed influenza activity
 * Post-pandemic seasons show resurgence
 
+## Key findings: (wave detection)
+
+* Influenza activity can be segmented into **distinct seasonal waves**  
+* Peak intensity varies substantially between seasons  
+* Recent seasons (e.g. 2022–2023) show unusually large epidemic peaks  
+* Some seasons (e.g. 2020–2021) show minimal transmission
 ### Conceptual insight:
 
-The dataset represents: a sequence of repeated epidemic processes rather than a single continuous time series
+- The dataset represents: a sequence of repeated epidemic processes rather than a single continuous time series
+- Each season corresponds to an independent epidemic with its own transmission dynamics.
 ---
 
 ## Reproducibility
