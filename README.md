@@ -99,7 +99,7 @@ source("run_all.R")
 
 🚧 This repository is under active development.
 
-Current implemented scripts:
+## Current implemented scripts:
 
 * `scripts/00_setup.R`
 * `scripts/01_download_data.R`
@@ -107,40 +107,64 @@ Current implemented scripts:
 * `scripts/03_exploratory_analysis.R`
 * `scripts/04_wave_detection.R`
 * `scripts/05_growth_rate_estimation.R`
+* `scripts/06_rt_estimation.R`
 
+---
 
-## Key findings:(EDA)
-* Strong seasonal epidemic patterns
-* Each year behaves as a separate epidemic event
-* Epidemics follow a typical shape:
- * growth - peak - decline
-* Large variability across seasons
-* COVID-19 period shows suppressed influenza activity
-* Post-pandemic seasons show resurgence
+## Key findings: (EDA)
+
+* Strong seasonal epidemic patterns  
+* Each year behaves as a separate epidemic event  
+* Epidemics follow a typical shape:  
+  * growth - peak - decline  
+* Large variability across seasons  
+* COVID-19 period shows suppressed influenza activity  
+* Post-pandemic seasons show resurgence  
+
+---
 
 ## Key findings: (wave detection)
 
 * Influenza activity can be segmented into **distinct seasonal waves**  
 * Peak intensity varies substantially between seasons  
 * Recent seasons (e.g. 2022–2023) show unusually large epidemic peaks  
-* Some seasons (e.g. 2020–2021) show minimal transmission
+* Some seasons (e.g. 2020–2021) show minimal transmission  
+
+---
 
 ## Key findings: (growth rate estimation)
-- Early epidemic phase follows approximately exponential growth
-- Estimated growth rate for 2022–2023 season:
- - r = 0.215 per week
- - r = 0.0307 per day
-- Corresponds to 24% increase in cases per week
-- Estimated doubling time = 23 days
-- Log-linear model provides a good fit during early growth phase
 
-### Conceptual insight:
+* Early epidemic phase follows approximately exponential growth  
+* Estimated growth rate for 2022–2023 season:  
+  * r = 0.215 per week  
+  * r = 0.0307 per day  
+* Corresponds to ~24% increase in cases per week  
+* Estimated doubling time ≈ 23 days  
+* Log-linear model provides a good fit during early growth phase  
 
-- The dataset represents: a sequence of repeated epidemic processes rather than a single continuous time series
-- Each season corresponds to an independent epidemic with its own transmission dynamics.
-- Reliable epidemic modelling requires focusing on:
-  - well-defined epidemic phases
-  - especially the early growth phase, where theoretical assumptions hold
+---
+
+## Key findings: (reproduction number estimation)
+
+* Estimated reproduction number for 2022–2023 early epidemic phase:  
+  * R ≈ 1.10  
+* Indicates sustained but moderate transmission  
+* Epidemic growth is driven by **R > 1 over multiple weeks**, not high instantaneous transmission  
+* Even modest transmission rates can lead to large epidemic peaks if sustained over time  
+
+---
+
+## Conceptual insight:
+
+* The dataset represents a **sequence of repeated epidemic processes**, rather than a single continuous time series  
+* Each season corresponds to an independent epidemic with its own transmission dynamics  
+* Epidemic analysis requires:
+  * identifying distinct epidemic waves  
+  * isolating appropriate modelling phases  
+
+* Reliable epidemic modelling depends on focusing on:
+  * well-defined epidemic phases  
+  * especially the early growth phase, where theoretical assumptions (e.g. exponential growth) hold  
 
 ---
 
