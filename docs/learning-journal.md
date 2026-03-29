@@ -368,6 +368,86 @@
 * Begin compartmental modelling (SIR / SIRS)
 
 ---
+# Reproduction Number (Rt) Estimation Task
+
+## Completed:
+
+* Created script `06_rt_estimation.R`
+* Loaded growth rate estimates
+* Assumed influenza generation time:
+  * **Tg = 3 days**
+* Applied exponential relationship:
+  * R ≈ exp(r × Tg)
+* Generated summary table:
+  * season
+  * growth phase dates
+  * growth rate
+  * estimated R
+
+---
+
+## Observations:
+
+* Estimated reproduction number:
+  * **R ≈ 1.10**
+* Indicates epidemic is growing:
+  * but at a moderate rate
+* Growth is sustained rather than explosive
+
+---
+
+## Interpretation:
+
+* Each infected individual generates:
+  * ~1.1 secondary infections
+* Epidemic expansion occurs because:
+  * R > 1 over multiple weeks
+* Large epidemic peaks can arise even when:
+  * R is only slightly above 1
+
+---
+
+## Understanding:
+
+* Growth rate (r) describes:
+  * speed of epidemic increase
+* Reproduction number (R) describes:
+  * transmission potential
+* Relationship:
+  * R ≈ exp(r × Tg)
+* R provides a more interpretable epidemiological metric
+
+---
+
+## Key Insight:
+
+* Large epidemics do not require large R
+* Sustained transmission (R > 1) is sufficient for significant outbreaks
+* Early epidemic phase contains the most reliable information about transmission
+
+---
+
+## Limitations:
+
+* Assumed fixed generation time (3 days)
+* Approximation used (simple exponential relationship)
+* Does not capture time-varying transmission dynamics
+
+---
+
+## Outcome:
+
+* Successfully estimated reproduction number
+* Connected statistical growth model to epidemiological interpretation
+* Established key transmission parameter for modelling
+
+---
+
+## Next Step:
+
+* Implement compartmental models (SIR / SIRS)
+
+---
 
 # Overall Project Understanding
 
@@ -378,17 +458,23 @@
 * Epidemic patterns explored
 * Waves identified
 * Growth rate estimated
+* Reproduction number estimated
 
 ---
 
 ## Key Conceptual Insight:
 
 * The dataset represents:
-
   * **a sequence of repeated epidemic processes**
 * Each season:
-
   * is an independent epidemic
-  * has its own dynamics
+  * has its own transmission dynamics
+
+* Epidemic modelling workflow:
+  1. Identify epidemic structure  
+  2. Isolate epidemic phases  
+  3. Estimate growth dynamics (r)  
+  4. Translate to epidemiological parameters (R)  
+  5. Move toward mechanistic models  
 
 ---
