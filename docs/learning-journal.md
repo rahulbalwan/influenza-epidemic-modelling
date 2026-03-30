@@ -459,6 +459,126 @@
 
 * Implement compartmental models (SIR / SIRS)
 
+--- 
+
+## SEIR Model Simulation Task
+
+### Completed:
+
+* Created script `07_seir_model.R`  
+* Loaded estimated reproduction number from previous step  
+* Defined a deterministic **SEIR compartmental model**:
+  * Susceptible  
+  * Exposed  
+  * Infectious  
+  * Recovered  
+* Set epidemiological parameters:
+  * **latent period = 2 days**
+  * **infectious period = 3 days**
+  * **R₀ ≈ 1.16**
+* Calculated:
+  * \(\sigma = 1 / \text{latent period}\)
+  * \(\gamma = 1 / \text{infectious period}\)
+  * \(\beta = R_0 \times \gamma\)
+* Chose initial conditions:
+  * **S = N - 1**
+  * **E = 1**
+  * **I = 0**
+  * **R = 0**
+* Simulated the epidemic over time using `deSolve`
+* Generated outputs:
+  * all-compartment plot
+  * infectious-only curve
+  * parameter table
+  * SEIR summary table  
+
+---
+
+### Observations:
+
+* The infectious curve showed:
+  * slow initial growth  
+  * gradual acceleration  
+  * a clear epidemic peak  
+* Peak infectious population:
+  * **~594 individuals**
+* Time to peak:
+  * **~273 days**
+* Susceptible population declined gradually
+* Recovered population increased steadily over time
+
+---
+
+### Interpretation:
+
+* Since **R₀ > 1**, the epidemic is self-sustaining  
+* Because **R₀ is only slightly above 1**, growth is:
+  * **moderate rather than explosive**
+* The epidemic peak occurs late because:
+  * transmission is sustained
+  * but not very strong  
+* The model produces a plausible epidemic wave consistent with the earlier growth-rate and R₀ estimates  
+
+---
+
+### Understanding:
+
+* The SEIR model represents infection progression as:
+  * \(S \rightarrow E \rightarrow I \rightarrow R\)
+* The exposed compartment introduces:
+  * a biologically realistic delay before infectiousness
+* Initialising with:
+  * **one exposed person**
+  makes the epidemic start in a mechanistically consistent way
+* The relationship between parameters is:
+  * \(\sigma = 1/L\)
+  * \(\gamma = 1/D\)
+  * \(\beta = R_0 \gamma\)
+
+---
+
+### Key Insight:
+
+* Mechanistic models provide:
+  * a bridge between **estimated parameters** and **epidemic behaviour**
+* A modest reproduction number can still generate:
+  * a large epidemic wave
+  if transmission continues for long enough
+* Model behaviour is shaped not only by \(R_0\), but also by:
+  * latent period
+  * infectious period
+  * initial conditions
+
+---
+
+### Limitations:
+
+* This is a **theoretical simulation**, not yet fitted directly to observed case counts  
+* Population size is illustrative rather than data-derived  
+* Initial conditions are assumed  
+* Model does not yet include:
+  * seasonality
+  * stochastic effects
+  * changing contact patterns
+  * observation/reporting processes  
+
+---
+
+### Outcome:
+
+* Successfully implemented a working SEIR model  
+* Linked earlier empirical estimates (**r**, **R₀**) to a mechanistic transmission framework  
+* Produced a full epidemic wave with:
+  * interpretable parameters
+  * meaningful epidemic dynamics  
+
+---
+
+### Next Step:
+
+* Compare SEIR simulation with observed influenza data
+* Explore model fit and possible extensions
+
 ---
 
 # Overall Project Understanding
@@ -471,6 +591,7 @@
 * Waves identified
 * Growth rate estimated
 * Reproduction number estimated
+* SEIR model implemented
 
 ---
 
@@ -485,8 +606,9 @@
 * Epidemic modelling workflow:
   1. Identify epidemic structure  
   2. Isolate epidemic phases  
-  3. Estimate growth dynamics (r)  
-  4. Translate to epidemiological parameters (R)  
-  5. Move toward mechanistic models  
+  3. Estimate growth dynamics (**r**)  
+  4. Translate to epidemiological parameters (**R₀**)  
+  5. Build mechanistic models (**SEIR**)  
+  6. Compare theory with observed epidemic behaviour  
 
 ---
