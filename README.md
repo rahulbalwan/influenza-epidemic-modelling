@@ -147,9 +147,9 @@ source("run_all.R")
 ## Key findings: (reproduction number estimation)
 
 * Estimated reproduction number for 2022–2023 early epidemic phase:  
-  * R ≈ 1.10  
+  * R0  ≈ 1.16  
 * Indicates sustained but moderate transmission  
-* Epidemic growth is driven by **R > 1 over multiple weeks**, not high instantaneous transmission  
+* Epidemic growth is driven by **R0 > 1 over multiple weeks**, not high instantaneous transmission  
 * Even modest transmission rates can lead to large epidemic peaks if sustained over time  
 
 ---
