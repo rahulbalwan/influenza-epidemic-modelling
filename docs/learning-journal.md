@@ -368,78 +368,90 @@
 * Begin compartmental modelling (SIR / SIRS)
 
 ---
-# Reproduction Number (Rt) Estimation Task
+# Reproduction Number Estimation Task
 
 ## Completed:
 
-* Created script `06_rt_estimation.R`
-* Loaded growth rate estimates
-* Assumed influenza generation time:
-  * **Tg = 3 days**
-* Applied exponential relationship:
-  * R ≈ exp(r × Tg)
-* Generated summary table:
-  * season
-  * growth phase dates
-  * growth rate
-  * estimated R
+* Created script `06_r0_estimation.R`  
+* Loaded growth rate estimates from previous step  
+* Incorporated epidemiological structure:
+  * **latent period = 2 days**
+  * **infectious period = 3 days**  
+* Applied SEIR-based relationship:
+  * **R₀ = (1 + rL)(1 + rD)**  
+* Generated summary table including:
+  * season  
+  * growth phase dates  
+  * growth rate  
+  * latent and infectious periods  
+  * estimated reproduction number  
 
 ---
 
 ## Observations:
 
 * Estimated reproduction number:
-  * **R ≈ 1.10**
+  * **R₀ ≈ 1.16**  
 * Indicates epidemic is growing:
-  * but at a moderate rate
-* Growth is sustained rather than explosive
+  * but at a **moderate rate**  
+* Growth is sustained rather than explosive  
 
 ---
 
 ## Interpretation:
 
 * Each infected individual generates:
-  * ~1.1 secondary infections
+  * ~**1.16 secondary infections**  
 * Epidemic expansion occurs because:
-  * R > 1 over multiple weeks
+  * **R₀ > 1 over multiple weeks**  
 * Large epidemic peaks can arise even when:
-  * R is only slightly above 1
+  * **R₀ is only slightly above 1**  
 
 ---
 
 ## Understanding:
 
-* Growth rate (r) describes:
-  * speed of epidemic increase
-* Reproduction number (R) describes:
-  * transmission potential
-* Relationship:
-  * R ≈ exp(r × Tg)
-* R provides a more interpretable epidemiological metric
+* Growth rate (**r**) describes:
+  * **speed of epidemic increase**  
+* Reproduction number (**R₀**) describes:
+  * **transmission potential**  
+* Relationship (SEIR framework):
+  * **R₀ = (1 + rL)(1 + rD)**  
+* Incorporating latent period improves:
+  * biological realism of the model  
+* R₀ provides a more interpretable:
+  * epidemiological parameter than raw growth rate  
 
 ---
 
 ## Key Insight:
 
-* Large epidemics do not require large R
-* Sustained transmission (R > 1) is sufficient for significant outbreaks
-* Early epidemic phase contains the most reliable information about transmission
+* Large epidemics do not require large R₀  
+* Sustained transmission (**R₀ > 1**) is sufficient for significant outbreaks  
+* Incorporating disease structure (latent + infectious stages):
+  * improves interpretation of transmission dynamics  
+* Early epidemic phase remains:
+  * the most reliable window for parameter estimation  
 
 ---
 
 ## Limitations:
 
-* Assumed fixed generation time (3 days)
-* Approximation used (simple exponential relationship)
-* Does not capture time-varying transmission dynamics
+* Latent and infectious periods are assumed (not estimated from data)  
+* R₀ is estimated from a selected growth window:
+  * sensitive to phase selection  
+* Does not capture:
+  * time-varying transmission (true \(R_t\))  
+* Based on simplified SEIR assumptions  
 
 ---
 
 ## Outcome:
 
-* Successfully estimated reproduction number
-* Connected statistical growth model to epidemiological interpretation
-* Established key transmission parameter for modelling
+* Successfully estimated reproduction number using a **mechanistically consistent approach**  
+* Linked statistical growth estimates to **epidemiological theory (SEIR framework)**  
+* Established a key transmission parameter (**R₀**) for use in:
+  * compartmental modelling  
 
 ---
 
