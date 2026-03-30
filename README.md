@@ -154,10 +154,30 @@ source("run_all.R")
 
 ---
 
+## Key findings: (SEIR model simulation)
+
+* Implemented a mechanistic **SEIR compartmental model** using estimated parameters  
+* Initial conditions:
+  * one exposed individual (E = 1), rest susceptible  
+* Model successfully reproduces:
+  * gradual epidemic growth  
+  * delayed peak (~273 days)  
+  * realistic epidemic wave structure  
+
+* Peak infectious population:
+  * ~594 individuals (for N = 100,000)  
+
+* Epidemic dynamics reflect:
+  * slow growth due to **R0 slightly above 1**  
+  * extended time to peak due to moderate transmission  
+
+---
+
 ## Conceptual insight:
 
 * The dataset represents a **sequence of repeated epidemic processes**, rather than a single continuous time series  
 * Each season corresponds to an independent epidemic with its own transmission dynamics  
+
 * Epidemic analysis requires:
   * identifying distinct epidemic waves  
   * isolating appropriate modelling phases  
@@ -165,6 +185,14 @@ source("run_all.R")
 * Reliable epidemic modelling depends on focusing on:
   * well-defined epidemic phases  
   * especially the early growth phase, where theoretical assumptions (e.g. exponential growth) hold  
+
+* Mechanistic models (SEIR) provide:
+  * a bridge between **data and transmission processes**  
+  * a way to interpret parameters like:
+    * growth rate (r)  
+    * reproduction number (R0)  
+    * latent and infectious periods  
+
 
 ---
 
