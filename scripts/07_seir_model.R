@@ -35,7 +35,7 @@ parameters <- c(beta = beta, sigma = sigma, gamma = gamma,  N = N)
 initial_state <- c(S = N - 1, E = 1, I = 0, R = 0)
 
 # Time grid
-time <- seq(0, 160, by = 1)
+time <- seq(0, 300, by = 1)
 # Run the SEIR model
 seir_output <- ode(y = initial_state, times = time, func = seir_model, parms = parameters)
 seir_output <- as.data.frame(seir_output)
