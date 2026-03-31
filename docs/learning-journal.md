@@ -712,6 +712,144 @@
 * Introduce seasonality and intervention effects  
 
 
+## SEIR Model Fitting to Observed Data
+
+### Objective
+
+To connect the mechanistic SEIR model with real influenza surveillance data and evaluate how well the model explains observed epidemic dynamics.
+
+---
+
+### Completed
+
+* Implemented parameter estimation using `optim()`
+* Fitted SEIR model to **2022–2023 influenza season**
+* Restricted fitting to **early epidemic growth phase**
+* Defined observation model:
+  * observed_cases ≈ ρ × (σE)
+
+* Estimated parameters:
+  * β (transmission rate)
+  * ρ (scaling factor)
+
+---
+
+### Key methodological improvement
+
+* Initial attempt used:
+  * predicted_cases = ρ × I  
+  → resulted in poor model fit  
+
+* Corrected to:
+  * predicted_cases = ρ × σE  
+  → aligns with incidence (new infections)
+
+* This change significantly improved model realism and fit quality  
+
+---
+
+### Results
+
+* Estimated parameters:
+  * β ≈ 0.402  
+  * R₀ ≈ 1.21  
+  * ρ ≈ 174  
+
+* Model fit:
+  * RMSE ≈ 117  
+  * MAE ≈ 112  
+
+* Peak timing:
+  * accurately captured by the model  
+
+---
+
+### Observations
+
+* The model:
+  * closely follows observed data during early growth  
+  * captures exponential increase in cases  
+
+* However:
+  * fails to reproduce full epidemic shape  
+  * does not capture sharp peak and decline  
+
+---
+
+### Interpretation
+
+* SEIR assumptions hold primarily during:
+  * early epidemic phase  
+
+* Later epidemic dynamics are influenced by:
+  * depletion of susceptibles  
+  * behavioural changes  
+  * seasonal variation  
+  * intervention effects  
+
+---
+
+### Key insight
+
+* Model validity depends on alignment between:
+  * theoretical assumptions  
+  * epidemiological phase  
+
+* Early growth phase is:
+  * the most informative window for estimating transmission parameters  
+
+* Using the correct observation model (incidence vs prevalence) is critical  
+
+---
+
+### Conceptual understanding
+
+* SEIR structure:
+  * S → E → I → R  
+
+* Incidence corresponds to:
+  * flow from E → I  
+
+* Observed case data reflects:
+  * new infections (incidence), not current infectious population  
+
+---
+
+### Limitations
+
+* Deterministic model (no stochasticity)
+* No seasonal forcing
+* No time-varying transmission
+* Population size assumed
+* No explicit observation/reporting process beyond scaling factor  
+
+---
+
+### Learning outcome
+
+* Successfully linked:
+  * empirical data  
+  * statistical estimation  
+  * mechanistic modelling  
+
+* Understood the importance of:
+  * model–data alignment  
+  * choosing correct epidemic phase  
+  * interpreting fitted parameters carefully  
+
+---
+
+### Next steps
+
+* Perform sensitivity analysis on key parameters:
+  * β, σ, γ  
+
+* Explore extended models:
+  * SIRS (waning immunity)  
+  * seasonal transmission  
+
+* Compare model outputs with full epidemic curves  
+
 
 
 
