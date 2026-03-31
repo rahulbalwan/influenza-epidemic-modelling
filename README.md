@@ -115,7 +115,7 @@ source("run_all.R")
 
 ---
 
-## Key findings: Exploratory analysis
+### Key findings: Exploratory analysis
 
 - Influenza shows strong **seasonal epidemic patterns**
 - Each year behaves as a **separate epidemic**
@@ -127,7 +127,7 @@ source("run_all.R")
 
 ---
 
-## Key findings: Wave detection
+### Key findings: Wave detection
 
 - Influenza activity can be segmented into **distinct seasonal waves**
 - Peak intensity varies across seasons
@@ -136,34 +136,56 @@ source("run_all.R")
 
 ---
 
-## Key findings: Growth rate
+### Key findings: growth rate estimation
 
-- Early epidemic phase follows **exponential growth**
-- 2022–2023 estimates:
-  - **r = 0.215 per week**
-  - **r = 0.0307 per day**
-- ~24% weekly increase
-- Doubling time ≈ 23 days
+* Early epidemic phase follows approximately exponential growth *(Anderson and May, 1991)*  
 
+* Estimated growth rate for 2022–2023 season:  
+  * r = 0.215 per week  
+  * r = 0.0307 per day  
+
+* Corresponds to ~24% increase in cases per week  
+* Estimated doubling time ≈ 23 days  
+
+* Log-linear model provides a good fit during early growth phase, consistent with theoretical epidemic growth dynamics *(Wallinga and Lipsitch, 2007)*  
 ---
 
-## Key findings: Reproduction number
+### Key findings: reproduction number estimation
 
-- **R₀ ≈ 1.16**
-- Indicates **sustained but moderate transmission**
-- Growth occurs because **R₀ > 1 over time**
+* Estimated reproduction number for 2022–2023 early epidemic phase:  
+  * R₀ ≈ 1.16  
 
----
+* Indicates sustained but moderate transmission  
+
+* Epidemic growth is driven by **R₀ > 1 over multiple weeks**, not high instantaneous transmission *(Diekmann et al., 1990)*  
+
+* Even modest transmission rates can lead to large epidemic peaks if sustained over time *(Anderson and May, 1991)*  
 
 ## SEIR model (mechanistic simulation)
 
 - Model structure: **S → E → I → R**
 - Includes latent period
 
-### Results
+### Key findings:
 
-- Peak infectious: ~594  
-- Time to peak: ~273 days  
+* Implemented a mechanistic **SEIR compartmental model** *(Keeling and Rohani, 2008)*  
+
+* Initial conditions:
+  * one exposed individual (E = 1), rest susceptible  
+
+* Model successfully reproduces:
+  * gradual epidemic growth  
+  * delayed peak (~273 days)  
+  * realistic epidemic wave structure  
+
+* Peak infectious population:
+  * ~594 individuals (for N = 100,000)  
+
+* Epidemic dynamics reflect:
+  * slow growth due to **R₀ slightly above 1**  
+  * extended time to peak due to moderate transmission  
+
+* The SEIR framework captures infection progression through biologically meaningful stages *(Vynnycky and White, 2010)*  
 
 ### Interpretation
 
@@ -177,10 +199,24 @@ source("run_all.R")
 - Extends SEIR by adding **waning immunity**
 - Transition: **Recovered → Susceptible**
 
-### Results
+### Key findings: (SIRS model simulation)
 
-- Peak infectious: ~1048  
-- Time to peak: ~159 days  
+* Extended SEIR framework to a **SIRS model** by incorporating waning immunity *(Keeling and Rohani, 2008)*  
+
+* Assumed:
+  * immunity duration ≈ 365 days  
+
+* Model produces:
+
+  * Earlier and larger epidemic peak  
+  * Peak infectious population:
+    * ~1048 individuals  
+  * Time to peak:
+    * ~159 days  
+
+* Infection persists at low levels due to **replenishment of susceptible individuals**  
+
+* This behaviour is consistent with diseases exhibiting **waning immunity and reinfection**, such as influenza *(Grassly and Fraser, 2006)*  
 
 ### Interpretation
 
@@ -202,12 +238,26 @@ Fitted to **early growth phase (2022–2023)**
   - β (transmission rate)
   - ρ (scaling factor)
 
-### Results
 
-- β ≈ 0.402  
-- R₀ ≈ 1.21  
-- ρ ≈ 174  
+### Key findings:
 
+* The SEIR model was fitted to observed influenza data from the **2022–2023 season**, focusing on the **early epidemic growth phase**  
+
+* The model was linked to observed case data using **incidence (σE)**, which better reflects new infections *(Keeling and Rohani, 2008)*  
+
+* Estimated parameters:
+  * β ≈ 0.402  
+  * R₀ ≈ 1.21  
+  * ρ ≈ 174  
+
+* The model provides an excellent fit to the early growth phase  
+
+* The early epidemic phase is the most reliable period for parameter estimation, as theoretical assumptions (exponential growth) hold *(Anderson and May, 1991)*  
+
+* However, the model does not capture full epidemic dynamics due to simplifying assumptions:
+  * constant transmission  
+  * no seasonality  
+  * homogeneous mixing  
 ### Performance
 
 - RMSE ≈ 117  
@@ -229,12 +279,23 @@ Fitted to **early growth phase (2022–2023)**
 - latent period
 - infectious period
 
-### Key insights
+### Key findings:
 
-- β and infectious period strongly affect epidemic size
-- Latent period mainly affects timing
-- Small parameter changes → large epidemic differences
+* Sensitivity analysis was performed to evaluate the effect of key parameters on epidemic dynamics *(Saltelli et al., 2008)*  
 
+* Parameters explored:
+  * transmission rate (β)  
+  * latent period  
+  * infectious period  
+
+* Results show:
+
+  * β and infectious period strongly influence epidemic size  
+  * latent period primarily affects timing  
+
+* Small changes in parameters can lead to large differences in epidemic outcomes  
+
+* This highlights the importance of parameter uncertainty in epidemiological modelling *(Saltelli et al., 2008)*  
 ---
 
 ## SEIR vs SIRS comparison
@@ -245,6 +306,23 @@ Fitted to **early growth phase (2022–2023)**
 | Time to peak | 273 days | 159 days |
 | Behaviour | single wave | persistent |
 
+### Key findings: 
+
+* Comparison highlights the impact of **immunity assumptions** on epidemic dynamics  
+
+* SEIR:
+  * single epidemic wave  
+  * infection eventually dies out  
+
+* SIRS:
+  * faster and larger epidemic  
+  * persistent transmission  
+
+* The inclusion of waning immunity allows:
+  * recurrent outbreaks  
+  * sustained infection levels  
+
+* This aligns with influenza epidemiology, where immunity is temporary and reinfection occurs *(Shaman et al., 2010)*  
 ### Conclusion
 
 - SEIR → short-term outbreaks  
@@ -256,11 +334,23 @@ Fitted to **early growth phase (2022–2023)**
 
 Introduces **time-varying transmission**:
 
-### Results
+### Key findings: (Seasonal SIRS model)
 
-- Peak infectious: ~5057  
-- Time to peak: ~1088 days  
-- Produces **recurrent epidemic waves**
+* Introduced **time-varying transmission**:
+
+  * β(t) = β₀ × (1 + α cos(2πt / 365))  
+
+* Seasonal forcing is a key driver of influenza dynamics *(Grassly and Fraser, 2006)*  
+
+* Model produces:
+  * recurrent epidemic waves  
+  * realistic seasonal patterns  
+
+* Epidemic dynamics arise from the interaction of:
+  * seasonal transmission  
+  * waning immunity  
+
+* This provides the most realistic representation of influenza behaviour in the project *(Shaman et al., 2010)*  
 
 ### Interpretation
 
