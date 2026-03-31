@@ -1365,3 +1365,12 @@ To evaluate how different epidemiological assumptions (permanent vs waning immun
   → Epidemic patterns emerge from **mechanisms + environment**, not just data  
 
 ---
+
+### Decision on project scope
+
+I attempted to extend the work further by fitting a seasonal SIRS model to the full multi-year dataset. However, this introduced numerical instability and optimisation difficulties, which highlighted that full long-term calibration of seasonal epidemic models is a substantially more advanced task.
+
+Rather than forcing an unstable fitting procedure, I decided to stop at the seasonal SIRS simulation stage. This was an appropriate decision because the main conceptual objective had already been achieved: demonstrating how seasonal transmission and waning immunity together can generate recurrent influenza epidemic patterns.
+
+This also reinforced an important modelling lesson: not every biologically realistic model is easy to fit reliably, and good modelling practice includes recognising when a simpler, interpretable, and well-supported endpoint is more appropriate.
+---

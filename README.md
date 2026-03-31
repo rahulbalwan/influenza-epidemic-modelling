@@ -722,7 +722,24 @@ To extend the SIRS model by incorporating **seasonal forcing** in transmission a
   * SIRS (non-seasonal)
 
 ---
+### Final scope of modelling work
 
+* The project was extended to a **seasonally forced SIRS model** to capture recurrent influenza-like dynamics
+
+* This model successfully demonstrated:
+  * repeated epidemic waves
+  * the role of waning immunity
+  * the effect of seasonal variation in transmission
+
+* A full multi-year parameter fitting step was explored but not completed, because:
+  * long-term seasonal model fitting is considerably more complex
+  * it introduces numerical and identifiability challenges
+  * it requires a more advanced calibration framework beyond the scope of the my current project understanding.
+
+* Therefore, the project concludes with:
+  * data-driven fitting for the early epidemic phase
+  * and simulation-based seasonal SIRS modelling for long-term epidemic behaviour
+---
 
 
 

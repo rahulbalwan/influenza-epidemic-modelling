@@ -1,0 +1,10 @@
+table_number,file_name,description
+Table 1,Table_1_growth_rate_summary.csv,Growth rate estimates
+Table 2,Table_2_r0_summary.csv,Reproduction number estimates
+Table 3,Table_3_seir_summary.csv,SEIR model summary
+Table 4,Table_4_sirs_summary.csv,SIRS model summary
+Table 5,Table_5_seir_fit_summary.csv,SEIR fit summary
+Table 6,Table_6_sensitivity_summary.csv,Sensitivity analysis summary
+Table 7,Table_7_seir_sirs_comparison.csv,SEIR vs SIRS comparison summary
+Table 8,Table_8_seasonal_sirs_summary.csv,Seasonal SIRS summary
+Table 9,Table_9_key_results_overview.csv,Overview of key results

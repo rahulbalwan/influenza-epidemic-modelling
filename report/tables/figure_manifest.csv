@@ -1,0 +1,22 @@
+figure_number,file_name,description
+Figure 1,Figure_1_time_series.png,Weekly influenza cases over time
+Figure 2,Figure_2_wave_detection_by_season.png,Detected influenza waves by season
+Figure 3,Figure_3_growth_phase_selected.png,Selected early growth phase
+Figure 4,Figure_4_growth_rate_log_fit.png,Log-linear growth fit
+Figure 5,Figure_5_seir_all_compartments.png,SEIR model compartment dynamics
+Figure 6,Figure_6_seir_infectious.png,SEIR infectious curve
+Figure 7,Figure_7_sirs_all_compartments.png,SIRS model compartment dynamics
+Figure 8,Figure_8_sirs_infectious.png,SIRS infectious curve
+Figure 9,Figure_9_seir_growth_phase_fit.png,SEIR fit to early growth phase
+Figure 10,Figure_10_seir_growth_phase_residuals.png,Residuals from SEIR growth-phase fit
+Figure 11,Figure_11_sensitivity_peak_infectious.png,Sensitivity analysis: peak infectious population
+Figure 12,Figure_12_sensitivity_time_to_peak.png,Sensitivity analysis: time to peak
+Figure 13,Figure_13_sensitivity_final_size.png,Sensitivity analysis: final epidemic size
+Figure 14,Figure_14_sensitivity_infectious_curves.png,Sensitivity analysis: infectious curves
+Figure 15,Figure_15_seir_vs_sirs_infectious.png,SEIR vs SIRS infectious comparison
+Figure 16,Figure_16_seir_vs_sirs_peak.png,SEIR vs SIRS peak infectious comparison
+Figure 17,Figure_17_seir_vs_sirs_time_to_peak.png,SEIR vs SIRS time-to-peak comparison
+Figure 18,Figure_18_seir_vs_sirs_final_state.png,SEIR vs SIRS final epidemic state comparison
+Figure 19,Figure_19_seasonal_sirs_compartments.png,Seasonal SIRS compartments
+Figure 20,Figure_20_seasonal_sirs_infectious.png,Seasonal SIRS infectious curve
+Figure 21,Figure_21_seasonal_sirs_beta_t.png,Seasonal transmission rate beta(t)

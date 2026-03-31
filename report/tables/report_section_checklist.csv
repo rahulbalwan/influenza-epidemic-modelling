@@ -1,0 +1,16 @@
+section,suggested_main_output
+Introduction,No figure required
+Data and preprocessing,Describe source and cleaned variables
+Exploratory data analysis,"Figure 1, Figure 2"
+Wave detection,Figure 2
+Growth-rate estimation,"Figure 3, Figure 4, Table 1"
+Reproduction number estimation,Table 2
+SEIR modelling,"Figure 5, Figure 6, Table 3"
+SIRS modelling,"Figure 7, Figure 8, Table 4"
+SEIR model fitting,"Figure 9, Figure 10, Table 5"
+Sensitivity analysis,"Figure 11-14, Table 6"
+SEIR vs SIRS comparison,"Figure 15-18, Table 7"
+Seasonal SIRS extension,"Figure 19-21, Table 8"
+Discussion,Table 9
+Limitations,Use model caveats from text
+Conclusion,Table 9

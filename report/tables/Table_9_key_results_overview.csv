@@ -1,0 +1,8 @@
+analysis_step,key_result
+Growth rate estimation,r = 0.215 per week
+Reproduction number estimation,R0 = 1.159
+SEIR simulation,"Peak I = 594.1, time to peak = 273 days"
+SIRS simulation,"Peak I = 1048.2, time to peak = 159 days"
+SEIR growth-phase fitting,"beta = 0.402, R0 = 1.207, RMSE = 117.3"
+SEIR vs SIRS comparison,"SEIR peak = 594.1, SIRS peak = 1048.2"
+Seasonal SIRS simulation,"Peak I = 5057, time to peak = 1088 days"
