@@ -6,4 +6,4 @@ renv/library/
 renv/staging/
 .DS_Store
 data/raw/*.zip
-output/
+output/app.R
