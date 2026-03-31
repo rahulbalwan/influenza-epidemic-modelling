@@ -1,4 +1,7 @@
+
 # Influenza Epidemic Modelling
+
+![SEIR vs SIRS](output/figures/seir_sirs_infectious_comparison.png)
 
 ![R](https://img.shields.io/badge/language-R-blue)
 ![Status](https://img.shields.io/badge/status-Completed-brightgreen)
@@ -10,7 +13,7 @@
 
 ---
 
-## 🚀 Project Summary
+## Project Summary
 
 This project analyses and models influenza transmission dynamics in the United Kingdom (2015–2026) using a **reproducible epidemiological modelling pipeline in R**.
 
@@ -20,7 +23,7 @@ The work combines:
 - mechanistic modelling (SEIR, SIRS)  
 - seasonal dynamics (time-varying transmission)  
 
-### 🔑 Key result
+### Key result
 
 → Influenza behaves as a **seasonal SIRS system**, driven by:
 
@@ -29,7 +32,7 @@ The work combines:
 
 ---
 
-## 🧠 Skills Demonstrated
+## Skills Demonstrated
 
 - Time series analysis  
 - Epidemiological modelling (SEIR, SIRS)  
@@ -41,7 +44,7 @@ The work combines:
 
 ---
 
-## 📊 Data
+## Data
 
 Source: **WHO FluNet**
 
@@ -51,7 +54,7 @@ Source: **WHO FluNet**
 
 ---
 
-## ⚙️ Modelling Workflow
+## Modelling Workflow
 EDA → Wave detection → Growth rate (r)
 → Reproduction number (R₀)
 → SEIR model → SIRS model
@@ -61,7 +64,7 @@ EDA → Wave detection → Growth rate (r)
 
 ---
 
-## 🔬 Key Findings
+## Key Findings
 
 ### Growth dynamics
 
@@ -104,7 +107,7 @@ EDA → Wave detection → Growth rate (r)
 
 ---
 
-### 🔬 Model fitting (data-driven)
+### Model fitting (data-driven)
 
 Fitted SEIR model to **early growth phase (2022–2023)**:
 
@@ -120,7 +123,7 @@ Model performance:
 
 ---
 
-### ⚙️ Sensitivity analysis
+### Sensitivity analysis
 
 Parameters varied:
 - β (transmission)  
@@ -134,7 +137,7 @@ Key insights:
 
 ---
 
-### 🔁 SEIR vs SIRS comparison
+### SEIR vs SIRS comparison
 
 | Metric | SEIR | SIRS |
 |------|------|------|
@@ -146,7 +149,7 @@ Key insights:
 
 ---
 
-### 🌦️ Seasonal SIRS model
+### Seasonal SIRS model
 
 Introduced time-varying transmission
 
@@ -159,7 +162,7 @@ Results:
 
 ---
 
-## 🧠 Conceptual Insight
+## Conceptual Insight
 
 Influenza behaves as a **recurrent seasonal epidemic system**, driven by:
 
@@ -179,7 +182,7 @@ Seasonal SIRS → realistic cycles
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 - Deterministic models (no stochasticity)  
 - No vaccination or intervention modelling  
@@ -188,7 +191,7 @@ Seasonal SIRS → realistic cycles
 
 ---
 
-## 📊 Dashboard
+## Dashboard
 
 An interactive **Shiny dashboard** is included.
 
@@ -199,7 +202,6 @@ Features:
 - model comparison  
 - seasonal simulation  
 
----
 
 
 ---
