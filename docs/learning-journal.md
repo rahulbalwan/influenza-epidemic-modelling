@@ -1429,16 +1429,16 @@ To build an interactive Shiny dashboard that presents the main results of the pr
 
 ---
 
-## What I completed
+## What I am working on:
 
-- Developed a Shiny dashboard (`app.R`)
-- Included tabs for:
+- Develop a Shiny dashboard (`app.R`)
+- Include tabs for:
   - Overview
   - EDA
   - Growth and Fit
   - Sensitivity Analysis
   - Model Comparison
-- Added:
+- Add:
   - season selectors
   - download buttons
   - value boxes
