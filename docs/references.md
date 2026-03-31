@@ -32,9 +32,9 @@ Wallinga, J. and Lipsitch, M. (2007) ‘How generation intervals shape the relat
 
 ## Influenza epidemiology
 
-Centers for Disease Control and Prevention (CDC) (2026) *Influenza (Flu)*. Available at: https://www.cdc.gov/flu (Accessed: 31 March 2026).
+Centers for Disease Control and Prevention (CDC) (2026) *Influenza (Flu)*. Available at: https://www.cdc.gov/flu (Accessed: 12 March 2026).
 
-European Centre for Disease Prevention and Control (ECDC) (2026) *Seasonal Influenza Surveillance*. Available at: https://www.ecdc.europa.eu (Accessed: 31 March 2026).
+European Centre for Disease Prevention and Control (ECDC) (2026) *Seasonal Influenza Surveillance*. Available at: https://www.ecdc.europa.eu (Accessed: 12 March 2026).
 
 Shaman, J., Pitzer, V.E., Viboud, C., Grenfell, B.T. and Lipsitch, M. (2010) ‘Absolute humidity and the seasonal onset of influenza in the continental United States’, *PLoS Biology*, 8(2), e1000316.
 

@@ -447,4 +447,11 @@ docs/learning-journal.md
 - MSc Medical Statistics and Health Data Science, University of Bristol  
 - MSc Statistics, IIT Kanpur  
 
+## Data usage note
 
+This project uses publicly available influenza surveillance data from WHO FluNet.  
+Users should refer to the original data source for terms of use and attribution requirements.
+
+## License
+
+This project is licensed under the MIT License – see the LICENSE file for details.
