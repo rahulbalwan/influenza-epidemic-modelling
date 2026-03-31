@@ -219,7 +219,105 @@ source("run_all.R")
 ---
 
 > Influenza behaves more like an **SIRS-type system** in reality, due to antigenic drift and waning immunity.
+--- 
+## Key findings: (SEIR model fitting)
 
+* The SEIR model was fitted to observed influenza data from the **2022–2023 season**, focusing on the **early epidemic growth phase**.
+
+### Model fitting approach
+
+* The model was linked to observed case data using **incidence**, defined as:
+  * σE (rate of transition from exposed to infectious)
+* A scaling parameter (ρ) was introduced to account for:
+  * under-reporting
+  * differences between model population and surveillance data
+
+* Parameters estimated:
+  * transmission rate (β)
+  * scaling factor (ρ)
+
+---
+
+### Fitted parameter estimates
+
+* β ≈ 0.402  
+* R₀ ≈ 1.21  
+* ρ ≈ 174  
+
+---
+
+### Model performance
+
+* The model provides an excellent fit to the early growth phase:
+  * RMSE ≈ 117  
+  * MAE ≈ 112  
+
+* The model successfully captures:
+  * exponential growth dynamics  
+  * acceleration of cases during early epidemic phase  
+
+---
+
+### Peak timing
+
+* Observed peak: **2022-11-21**  
+* Predicted peak: **2022-11-21**  
+
+* The model accurately reproduces the timing of epidemic growth during the fitting window  
+
+---
+
+### Interpretation
+
+* The SEIR model is well-suited for modelling:
+  * early epidemic growth  
+  * transmission dynamics under near-exponential conditions  
+
+* The estimated reproduction number (**R₀ ≈ 1.21**) confirms:
+  * sustained but moderate transmission  
+
+---
+
+### Limitations
+
+* The model does not accurately reproduce the **full epidemic curve**, including:
+  * peak magnitude  
+  * post-peak decline  
+
+* This is due to simplifying assumptions:
+  * constant transmission rate (β)  
+  * homogeneous mixing  
+  * no seasonal forcing  
+  * no behavioural or policy changes  
+
+---
+
+### Key insight
+
+* Mechanistic models must be applied to **appropriate epidemic phases**
+
+* The early growth phase is:
+  * the most reliable period for parameter estimation  
+  * consistent with theoretical assumptions (exponential growth)
+
+* Modelling the full epidemic requires:
+  * time-varying transmission (β(t))  
+  * seasonal effects  
+  * extended models such as SIRS  
+
+---
+
+### Conclusion
+
+* The SEIR model successfully bridges:
+  * empirical estimates (growth rate, R₀)  
+  * mechanistic epidemic dynamics  
+
+* It provides a strong foundation for:
+  * further model development  
+  * sensitivity analysis  
+  * more realistic epidemic modelling frameworks  
+---
 ## Conceptual insight (Overall):
 
 * The dataset represents a **sequence of repeated epidemic processes**, rather than a single continuous time series  
