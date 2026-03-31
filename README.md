@@ -172,8 +172,55 @@ source("run_all.R")
   * extended time to peak due to moderate transmission  
 
 ---
+## Key findings: (SIRS model simulation)
 
-## Conceptual insight:
+* Extended SEIR framework to a **SIRS model** by incorporating waning immunity  
+* Assumed:
+  * immunity duration ≈ 365 days  
+
+* Model produces:
+
+  * **Earlier and larger epidemic peak** compared to SEIR  
+    * Peak infectious population:
+      * ~1048 individuals  
+    * Time to peak:
+      * ~159 days  
+
+* Key behavioural differences:
+
+  * Susceptible population **recovers over time** due to loss of immunity  
+  * Infection does **not fully disappear**  
+  * System shows **persistent low-level transmission**
+
+* Epidemic dynamics reflect:
+
+  * Reinfection plays an important role in influenza transmission  
+  * Even with **R₀ ≈ 1.16**, the disease can persist long-term  
+  * Transmission is sustained through **continuous replenishment of susceptibles**
+
+---
+
+## Conceptual extension:
+
+* Moving from SEIR → SIRS introduces a key epidemiological mechanism:
+
+   **Waning immunity**
+
+* This changes the interpretation of epidemic behaviour:
+
+  * SEIR → single-wave epidemic  
+  * SIRS → recurring / endemic dynamics  
+
+* Highlights that:
+
+  * Epidemic persistence depends not only on transmission (R₀)  
+  * but also on **duration of immunity**
+
+---
+
+> Influenza behaves more like an **SIRS-type system** in reality, due to antigenic drift and waning immunity.
+
+## Conceptual insight (Overall):
 
 * The dataset represents a **sequence of repeated epidemic processes**, rather than a single continuous time series  
 * Each season corresponds to an independent epidemic with its own transmission dynamics  
