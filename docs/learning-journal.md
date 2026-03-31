@@ -580,6 +580,140 @@
 * Explore model fit and possible extensions
 
 ---
+## SIRS Model Simulation Task
+
+### Completed:
+
+* Created script `08_sirs_model.R`  
+* Extended SEIR framework to include **waning immunity**  
+* Defined a deterministic **SIRS compartmental model**:
+  * Susceptible  
+  * Infectious  
+  * Recovered → Susceptible (loss of immunity)  
+
+* Set epidemiological parameters:
+  * **infectious period = 3 days**
+  * **R₀ ≈ 1.16**
+  * **immunity duration = 365 days**
+
+* Calculated:
+  * \(\gamma = 1 / \text{infectious period}\)  
+  * \(\omega = 1 / \text{immunity duration}\)  
+  * \(\beta = R_0 \times \gamma\)
+
+* Initial conditions:
+  * **S = N - 1**
+  * **I = 1**
+  * **R = 0**
+
+* Simulated dynamics over time using `deSolve`
+* Generated outputs:
+  * all-compartment plot  
+  * infectious curve  
+  * parameter table  
+  * SIRS summary table  
+
+---
+
+### Observations:
+
+* The infectious curve showed:
+  * a **faster and earlier peak** compared to SEIR  
+  * peak infectious population:
+    * **~1048 individuals**
+  * time to peak:
+    * **~159 days**
+
+* After the initial wave:
+  * infections decline  
+  * but **do not go to zero**
+
+* Susceptible population:
+  * drops initially  
+  * then **recovers over time**
+
+* Recovered population:
+  * increases  
+  * then **declines due to waning immunity**
+
+---
+
+### Interpretation:
+
+* The key difference from SEIR:
+  **Immunity is temporary**
+
+* This leads to:
+  * replenishment of the susceptible pool  
+  * continued low-level transmission  
+  * potential for **recurrent waves**
+
+* Unlike SEIR:
+  * epidemic does **not fully die out**
+  * system tends toward a **dynamic equilibrium**
+
+---
+
+### Understanding:
+
+* The SIRS model represents:
+  * \(S \rightarrow I \rightarrow R \rightarrow S\)
+
+* New parameter introduced:
+  * \(\omega\): rate of immunity loss  
+
+* Dynamics are governed by:
+  * \(\beta\): transmission  
+  * \(\gamma\): recovery  
+  * \(\omega\): waning immunity  
+
+* Even with **R₀ only slightly above 1**:
+  * long-term persistence becomes possible  
+  * because susceptible individuals are continuously replenished  
+
+---
+
+### Key Insight:
+
+* Adding waning immunity fundamentally changes epidemic behaviour:
+
+| Model | Long-term behaviour |
+|------|--------------------|
+| SEIR | Single epidemic wave |
+| SIRS | Persistent / recurring transmission |
+
+* Epidemics are not just about **spread** — but also about:
+   **how immunity evolves over time**
+
+---
+
+### Limitations:
+
+* Immunity duration is assumed (365 days)  
+* No seasonality included (important for influenza)  
+* Deterministic model (no stochastic variability)  
+* No vaccination or interventions  
+* Not yet fitted to observed data  
+
+---
+
+### Outcome:
+
+* Successfully extended the model to include **reinfection dynamics**  
+* Demonstrated how **waning immunity sustains transmission**  
+* Produced a more realistic long-term epidemic structure  
+
+---
+
+### Next Step:
+
+* Fit model to observed data (**parameter estimation**)  
+* Compare SEIR vs SIRS fits  
+* Introduce seasonality and intervention effects  
+
+
+
+
 
 # Overall Project Understanding
 
