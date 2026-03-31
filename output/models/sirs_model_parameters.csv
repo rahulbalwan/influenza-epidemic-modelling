@@ -1,0 +1,11 @@
+parameter,value
+N,100000
+infectious_period,3
+gamma,0.3333333333333333
+waning_immunity_period,365
+omega,0.0027397260273972603
+R0_est,1.1592253278338172
+beta,0.3864084426112724
+S0,99999
+I0,1
+R0_initial,0

@@ -1,0 +1,12 @@
+parameter,value
+N,100000
+latent_period,2
+infectious_period,3
+sigma,0.5
+gamma,0.3333333333333333
+R0_est,1.1592253278338172
+beta,0.3864084426112724
+S0,99999
+E0,1
+I0,0
+R0_initial,0

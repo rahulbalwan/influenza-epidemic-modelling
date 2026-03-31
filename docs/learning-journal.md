@@ -1,1376 +1,1591 @@
+# Learning Journal: Influenza Epidemic Modelling
 
-# Setup Task
+This journal documents the reasoning, decisions, interpretation, and conceptual development behind the influenza epidemic modelling project. It reflects not only what was done at each step, but also why each step mattered and what was learned from it.
 
-## Completed:
+---
 
-* Created a new project folder: `influenza-epidemic-modelling`
-* Initialized Git repository
-* Set up structured project directories:
+# 1. Project Setup and Reproducible Structure
 
-  * `data/raw`, `data/processed`, `data/interim`
-  * `scripts/`, `output/`, `docs/`, `report/`
-* Added `.gitignore`
-* Created initial `README.md`
-* Created `learning-journal.md`
-* Wrote `00_setup.R`:
+## Objective
 
-  * installs required R packages
-  * creates directory structure automatically
-* Connected local project to GitHub
+To create a clean, reproducible project structure that supports epidemiological analysis from raw surveillance data through to modelling, outputs, and reporting.
 
 ---
 
-## Understanding:
+## What I completed
 
-* A reproducible workflow requires clear separation of:
+- Created a new project folder: `influenza-epidemic-modelling`
+- Initialised a Git repository
+- Created structured project directories:
+  - `data/raw`
+  - `data/interim`
+  - `data/processed`
+  - `data/metadata`
+  - `scripts`
+  - `output/figures`
+  - `output/tables`
+  - `output/models`
+  - `docs`
+  - `report`
+- Added a `.gitignore`
+- Created an initial `README.md`
+- Created this `learning-journal.md`
+- Wrote `00_setup.R` to:
+  - install required packages
+  - load required libraries
+  - generate folders automatically
+- Connected the local repository to GitHub
 
-  * raw data
-  * processed data
-  * scripts
-  * outputs
-* Git should be used from the beginning to track all changes
-* Epidemiological modelling projects require structured pipelines
-* The workflow will follow:
+---
 
-  * setup → cleaning → exploration → wave detection → growth estimation → modelling
+## Why this step mattered
 
----
+Before doing any analysis, I wanted the project to be organised in a way that would support:
 
-## Next Step:
+- reproducibility
+- transparency
+- version control
+- clean separation between raw data, processed data, scripts, and outputs
 
-* Load and inspect raw influenza data
-* Identify key variables and structure
+This is especially important in epidemiological work because modelling decisions often depend on previous preprocessing steps. If the project is not structured well, it becomes difficult to trace how final results were produced.
 
 ---
 
-# Data Loading & Inspection Task
+## Interpretation and understanding
 
-## Completed:
+This stage made it clear that **good modelling begins long before model equations are written**. A project structure is not just administrative; it shapes the way analysis is conducted.
 
-* Downloaded influenza data from WHO FluNet (UK, 2015–2026)
-* Saved dataset in `data/raw/flunet_uk.xlsx`
-* Created `01_download_data.R` to validate file existence
-* Loaded data using `read_excel()`
-* Cleaned column names using `janitor::clean_names()`
-* Inspected:
+I understood that a reproducible workflow requires:
 
-  * column names
-  * structure
-  * key variables
+- raw data to remain unchanged
+- processed data to be generated through scripts
+- outputs to be regenerated automatically
+- code to be version-controlled from the start
 
+This also helped me think of the project as a **pipeline** rather than a sequence of disconnected tasks.
+
 ---
+
+## Conceptual takeaway
 
-## Observations:
+At this point, I began to see epidemiological modelling as a layered workflow:
 
-* Dataset contains weekly influenza surveillance data
-* Key variables identified:
+1. data acquisition
+2. cleaning and structuring
+3. understanding epidemic shape
+4. extracting epidemiological quantities
+5. translating those quantities into mechanistic models
 
-  * `iso_year`, `iso_week`
-  * `spec_processed_nb` (tested)
-  * `inf_all` (positive)
-* Multiple rows exist per week
-* Data is not structured as one observation per time point
-* Variables may come from multiple reporting sources
+That overall logic became the backbone of the project.
 
 ---
 
-## Understanding:
+## Limitations / things noted
 
-* Raw surveillance data is not analysis-ready
-* Data represents reported detections, not true infections
-* Multiple reporting streams may be combined in the dataset
+- Initial directory naming required some later cleanup for consistency (`output` vs `outputs`)
+- At this stage, the workflow existed only as a project scaffold; the epidemiological meaning would emerge later
 
 ---
 
-## Next Step:
+## Outcome
 
-* Clean and restructure the dataset
-* Convert it into a weekly time series
+A reproducible and scalable project structure was successfully created, providing a foundation for all later data analysis and modelling.
 
 ---
 
-# Data Cleaning Task
+# 2. Data Loading and Initial Inspection
 
-## Completed:
+## Objective
 
-* Created cleaning script `02_clean_data.R`
-* Selected relevant variables:
+To load the raw influenza surveillance data, inspect its structure, identify relevant variables, and understand what kind of information the dataset actually contains.
 
-  * year, week, tested, positive
-* Converted all variables to numeric
-* Created weekly date using ISO week format
-* Aggregated data to one row per week
-* Attempted to compute positivity
+---
+
+## What I completed
+
+- Downloaded WHO FluNet influenza data for the **United Kingdom**
+- Covered the period **2015–2026**
+- Saved the raw file in `data/raw/flunet_uk.xlsx`
+- Created `01_download_data.R` to validate file existence
+- Loaded the data using `read_excel()`
+- Standardised column names using `janitor::clean_names()`
+- Inspected:
+  - column names
+  - variable structure
+  - key influenza reporting fields
 
 ---
 
-## Observations:
+## What I observed
 
-* Multiple rows per week required aggregation
-* Found inconsistencies:
+The raw file contained weekly influenza surveillance data, but it was not in a simple “one row per week” format.
 
-  * `tested = 0` with `positive > 0`
-  * positivity = Inf
-  * positivity > 1
-* Even after aggregation:
+Important variables included:
 
-  * `positive > tested` still occurred
+- `iso_year`
+- `iso_week`
+- `spec_processed_nb`
+- `inf_all`
 
+I found that:
+
+- multiple rows existed for the same week
+- data appeared to come from multiple reporting channels or laboratory sources
+- the dataset was not immediately suitable for time-series modelling
+
 ---
 
-## Understanding:
+## Interpretation
 
-* `tested` and `positive` are not directly comparable
-* Positivity is not a reliable measure in this dataset
-* Data reflects complex reporting rather than a simple numerator-denominator structure
+This stage was important because it prevented me from making incorrect assumptions too early.
 
----
+The raw data did **not** represent:
 
-## Key Decision:
+- one clean weekly observation
+- direct measures of infection incidence
+- a simple numerator-denominator surveillance structure
 
-* Dropped positivity from analysis
-* Selected:
+Instead, it represented **reported detections within a surveillance system**, which is a very different thing from true infections in the population.
 
-  * **weekly positive detections** as main outcome variable
+This distinction became central later when I started fitting compartmental models. It reminded me that model states such as `I(t)` are not directly equivalent to observed positive counts.
 
 ---
 
-## Outcome:
+## What I learned conceptually
 
-* Created clean dataset:
+This step deepened my understanding that surveillance data are:
 
-  * one row per week
-  * consistent time variable
-* Saved to:
+- observational
+- incomplete
+- indirect
+- shaped by reporting processes
 
-  * `data/processed/flu_clean.csv`
+In epidemiology, data do not speak for themselves. They must be interpreted in relation to what they actually measure.
 
----
+This also raised an early modelling question:
 
-## Next Step:
+> Am I modelling infections in the population, or detections within a surveillance system?
 
-* Perform exploratory analysis
-* Understand epidemic patterns
+That question influenced many later decisions, especially in the model-fitting stage.
 
 ---
 
-# Exploratory Analysis Task
+## Limitations / things noted
 
-## Completed:
+- The raw file did not explicitly explain why multiple rows existed per week
+- Surveillance data structure implied some hidden complexity in reporting streams
+- Direct interpretation of tested vs positive values needed caution
 
-* Created script `03_exploratory_analysis.R`
-* Loaded cleaned dataset
-* Defined influenza seasons:
+---
 
-  * week 40 → week 20 (next year)
-* Generated plots:
+## Outcome
 
-  * full time series
-  * seasonal overlay
-  * faceted seasonal plots
+I identified the key variables needed for analysis and confirmed that the raw data would require substantial cleaning and restructuring before any epidemiological interpretation could begin.
 
 ---
+
+# 3. Data Cleaning and Time-Series Construction
 
-## Observations:
+## Objective
 
-* Strong seasonal pattern (winter peaks)
-* Each season shows:
+To convert the raw surveillance data into a clean weekly time series suitable for exploratory analysis and modelling.
 
-  * growth → peak → decline
-* Large variability across years
-* COVID-19 period (2020–2021):
+---
 
-  * very low influenza activity
-* Post-pandemic seasons:
+## What I completed
 
-  * unusually high peaks
+- Created `02_clean_data.R`
+- Selected the key variables:
+  - year
+  - week
+  - tested
+  - positive
+- Converted variables to numeric
+- Constructed weekly dates using ISO week conventions
+- Aggregated multiple rows into a single weekly observation
+- Investigated positivity as a potential derived measure
 
 ---
 
-## Understanding:
+## What I observed
 
-* Data is not one continuous time series
-* It represents:
+Aggregation was necessary because multiple rows per week existed in the raw file.
 
-  * **repeated seasonal epidemics**
-* Each season behaves like:
+While attempting to compute positivity (`positive / tested`), I encountered several issues:
 
-  * an independent epidemic event
+- `tested = 0` with `positive > 0`
+- positivity = `Inf`
+- positivity > 1
+- even after aggregation, `positive > tested` still occurred in some weeks
 
 ---
 
-## Key Insight:
+## Interpretation
 
-* Modelling should not be done on full dataset
-* It should focus on:
+This was a critical stage because it forced me to think carefully about **data validity** and **variable meaning**.
 
-  * individual seasons
-  * specific epidemic phases
-
----
+Initially, positivity seemed attractive because it could normalize case counts by testing effort. However, the inconsistencies showed that:
 
-## Next Step:
+- `tested` and `positive` were not directly comparable in a simple way
+- they may have originated from different reporting streams or data structures
+- positivity would introduce misleading quantities rather than improve analysis
 
-* Detect and structure epidemic waves
+This was one of the most important early decisions in the project.
 
 ---
 
-# Wave Detection Task
+## Key analytical decision
 
-## Completed:
+I decided to **drop positivity from the analysis** and use:
 
-* Created script `04_wave_detection.R`
-* Used seasonal classification
-* Applied smoothing (rolling mean)
-* Visualised epidemic waves
-* Identified peaks for each season
-* Created summary table:
+> **weekly positive detections** as the main outcome variable
 
-  * peak week
-  * peak date
-  * peak cases
+This decision improved clarity and avoided forcing a derived variable that the data structure did not support reliably.
 
 ---
 
-## Observations:
+## What I learned conceptually
 
-* Each season has a distinct epidemic wave
-* Peak magnitude varies widely:
+Cleaning is not just technical formatting. It is part of **epidemiological reasoning**.
 
-  * very low (2020–2021)
-  * extremely high (2022–2023)
-* Peak timing differs between seasons
-* Some waves are more symmetric than others
+A key lesson here was:
 
----
+> Not every available variable should be used.
+
+The best variable is not always the most theoretically attractive one; it is the one that is:
+
+- interpretable
+- internally consistent
+- defensible
 
-## Understanding:
+Using weekly positives meant that later results would be interpreted as **detected influenza activity**, not exact infection incidence.
 
-* Epidemics occur as:
+---
 
-  * **discrete waves**
-* Each wave represents:
+## Limitations / things noted
 
-  * a separate transmission process
-* External factors (e.g., COVID) affect wave size and timing
+- Positive detections remain a proxy for true transmission
+- Testing and reporting practices may have changed over time
+- The cleaned series reflects surveillance intensity as well as disease activity
 
 ---
+
+## Outcome
+
+I created a consistent weekly dataset with:
 
-## Key Insight:
+- one row per week
+- a proper time variable
+- a clear outcome measure (`positive`)
 
-* The correct unit of analysis is:
+This was saved as:
 
-  * **epidemic wave**, not full time series
+- `data/processed/flu_clean.csv`
 
 ---
 
-## Outcome:
+# 4. Exploratory Data Analysis
 
-* Structured dataset into seasonal epidemic waves
-* Identified best candidate for modelling:
+## Objective
 
-  * 2022–2023 season
+To understand the overall shape of influenza activity across years and determine whether the dataset should be analysed as one continuous time series or as repeated seasonal epidemics.
 
 ---
 
-## Next Step:
+## What I completed
 
-* Estimate growth rate in early epidemic phase
+- Created `03_exploratory_analysis.R`
+- Loaded the cleaned data
+- Defined influenza seasons using:
+  - week 40 to week 20 of the following year
+- Generated:
+  - full time-series plot
+  - seasonal overlays
+  - faceted plots by season
 
 ---
 
-# Growth Rate Estimation Task
+## What I observed
 
-## Completed:
+The results showed:
 
-* Created script `05_growth_rate_estimation.R`
-* Selected 2022–2023 epidemic wave
-* Chose early growth phase manually
-* Applied smoothing (3-week rolling mean)
-* Created:
+- strong winter seasonality
+- a repeated pattern of:
+  - growth
+  - peak
+  - decline
+- large variability in peak size between years
+- extremely low activity during 2020–2021
+- strong resurgence after the COVID period
 
-  * time index
-  * log-transformed cases
-* Fitted model:
+---
 
-  * `log_cases ~ time_index`
-* Generated plots:
+## Interpretation
 
-  * growth phase
-  * log-linear fit
-* Saved summary table
+This stage changed how I thought about the dataset.
 
----
+At first glance, the data looked like a long time series from 2015 to 2026. But the plots showed that it is more meaningful to interpret the data as:
 
-## Observations:
+> **a sequence of repeated seasonal epidemics**
 
-* Growth phase shows increasing trend
-* Log-transformed data shows near-linear relationship
-* Estimated growth rate:
+This is a major epidemiological distinction.
 
-  * **r ≈ 0.215 per week**
-  * **r ≈ 0.0307 per day**
+If I had treated the whole dataset as one continuous epidemic process, I would have ignored the fact that influenza re-emerges seasonally under changing conditions.
 
+Instead, each season appeared to behave like its own epidemic event, with its own:
+
+- initiation
+- growth phase
+- peak timing
+- decline pattern
+- intensity
+
 ---
+
+## What I learned conceptually
 
-## Interpretation:
+This step taught me that the **unit of analysis matters**.
 
-* Epidemic follows **exponential growth** in early phase
-* Cases increase:
+For influenza, the meaningful unit is not simply “time across many years,” but often:
 
-  * ~24% per week
-* Doubling time:
+- a season
+- a wave
+- a particular epidemic phase
 
-  * ~23 days
+This insight later justified:
 
+- wave detection
+- focusing on specific seasons
+- fitting models only to selected windows such as the early growth phase
+
 ---
 
-## Understanding:
+## Broader interpretation
 
-* Early epidemic phase approximates:
-  [
-  I(t) = I_0 e^{rt}
-  ]
-* Log transformation allows:
+The COVID-disrupted period was especially informative. It demonstrated that influenza dynamics are shaped not only by pathogen biology, but also by:
 
-  * linear regression estimation
-* Growth rate reflects:
+- social behaviour
+- public health interventions
+- contact structure
+- environmental conditions
 
-  * transmission intensity
+So even at the exploratory stage, it became clear that influenza is a **context-dependent epidemic system**, not just a pathogen spreading at a fixed rate.
 
 ---
 
-## Key Insight:
+## Limitations / things noted
 
-* Only early growth phase should be used for estimation
-* Full epidemic curve violates model assumptions
+- Seasonal definitions are somewhat conventional
+- Seasonal comparison is descriptive at this stage, not yet mechanistic
+- Surveillance intensity may vary across years
 
 ---
 
-## Limitations:
+## Outcome
 
-* Growth phase selected manually
-* Small number of observations
-* Results sensitive to window selection
+Exploratory analysis established that:
 
+- influenza has strong seasonal epidemic structure
+- seasons should be treated as distinct epidemic processes
+- the modelling strategy should focus on individual waves and phases, not the full raw series
+
 ---
+
+# 5. Wave Detection and Seasonal Structuring
 
-## Outcome:
+## Objective
 
-* Successfully estimated epidemic growth rate
-* Established first quantitative epidemic parameter
+To explicitly structure the data into seasonal epidemic waves and identify the timing and intensity of peaks for each season.
 
 ---
 
-## Next Step:
+## What I completed
 
-* Convert growth rate to reproduction number (R)
-* Begin compartmental modelling (SIR / SIRS)
+- Created `04_wave_detection.R`
+- Used the influenza season definition from exploratory analysis
+- Applied smoothing using a rolling mean
+- Visualised waves over time and by season
+- Identified seasonal peaks
+- Created summary outputs containing:
+  - peak week
+  - peak date
+  - peak cases
 
 ---
-# Reproduction Number Estimation Task
 
-## Completed:
+## What I observed
 
-* Created script `06_r0_estimation.R`  
-* Loaded growth rate estimates from previous step  
-* Incorporated epidemiological structure:
-  * **latent period = 2 days**
-  * **infectious period = 3 days**  
-* Applied SEIR-based relationship:
-  * **R₀ = (1 + rL)(1 + rD)**  
-* Generated summary table including:
-  * season  
-  * growth phase dates  
-  * growth rate  
-  * latent and infectious periods  
-  * estimated reproduction number  
+Wave detection confirmed that:
 
+- each influenza season has a distinct epidemic wave
+- peak timing varies between seasons
+- peak magnitude varies dramatically
+- 2022–2023 had a particularly large wave
+- 2020–2021 had almost no influenza signal
+
 ---
 
-## Observations:
+## Interpretation
 
-* Estimated reproduction number:
-  * **R₀ ≈ 1.16**  
-* Indicates epidemic is growing:
-  * but at a **moderate rate**  
-* Growth is sustained rather than explosive  
+This stage transformed descriptive seasonality into a more explicit **wave-based representation**.
 
----
+Rather than simply saying “influenza is seasonal,” I could now characterise each season as a separate epidemic object.
+
+This was useful because epidemic models are usually built around the idea of a wave or outbreak, not an arbitrarily long surveillance stream.
 
-## Interpretation:
+The 2022–2023 season emerged as the strongest candidate for modelling because it showed:
 
-* Each infected individual generates:
-  * ~**1.16 secondary infections**  
-* Epidemic expansion occurs because:
-  * **R₀ > 1 over multiple weeks**  
-* Large epidemic peaks can arise even when:
-  * **R₀ is only slightly above 1**  
+- a clear rise
+- substantial signal
+- a large peak
+- an interpretable epidemic shape
 
 ---
 
-## Understanding:
+## What I learned conceptually
 
-* Growth rate (**r**) describes:
-  * **speed of epidemic increase**  
-* Reproduction number (**R₀**) describes:
-  * **transmission potential**  
-* Relationship (SEIR framework):
-  * **R₀ = (1 + rL)(1 + rD)**  
-* Incorporating latent period improves:
-  * biological realism of the model  
-* R₀ provides a more interpretable:
-  * epidemiological parameter than raw growth rate  
+Wave detection made the project more epidemiologically precise.
 
----
+It clarified that the correct object for mechanistic modelling is not the whole surveillance record, but a defined epidemic episode.
 
-## Key Insight:
+This matters because quantities such as:
 
-* Large epidemics do not require large R₀  
-* Sustained transmission (**R₀ > 1**) is sufficient for significant outbreaks  
-* Incorporating disease structure (latent + infectious stages):
-  * improves interpretation of transmission dynamics  
-* Early epidemic phase remains:
-  * the most reliable window for parameter estimation  
+- growth rate
+- reproduction number
+- peak timing
 
+must be interpreted within a specific epidemic context.
+
 ---
+
+## Broader reflection
 
-## Limitations:
+Wave detection also highlighted that epidemic timing is not fixed. Influenza does not simply peak on the same week every year. That variation suggested that:
 
-* Latent and infectious periods are assumed (not estimated from data)  
-* R₀ is estimated from a selected growth window:
-  * sensitive to phase selection  
-* Does not capture:
-  * time-varying transmission (true \(R_t\))  
-* Based on simplified SEIR assumptions  
+- transmission is modulated by context
+- epidemic timing emerges from both pathogen and environment
+- a later seasonal model should account for time-varying transmission
 
 ---
 
-## Outcome:
+## Outcome
 
-* Successfully estimated reproduction number using a **mechanistically consistent approach**  
-* Linked statistical growth estimates to **epidemiological theory (SEIR framework)**  
-* Established a key transmission parameter (**R₀**) for use in:
-  * compartmental modelling  
+The dataset was successfully restructured into seasonal waves, and the **2022–2023 season** was selected as the primary season for detailed modelling.
 
 ---
 
-## Next Step:
+# 6. Growth Rate Estimation
 
-* Implement compartmental models (SIR / SIRS)
+## Objective
 
---- 
+To estimate the exponential growth rate during the early phase of the 2022–2023 epidemic.
 
-## SEIR Model Simulation Task
+---
 
-### Completed:
+## What I completed
 
-* Created script `07_seir_model.R`  
-* Loaded estimated reproduction number from previous step  
-* Defined a deterministic **SEIR compartmental model**:
-  * Susceptible  
-  * Exposed  
-  * Infectious  
-  * Recovered  
-* Set epidemiological parameters:
-  * **latent period = 2 days**
-  * **infectious period = 3 days**
-  * **R₀ ≈ 1.16**
-* Calculated:
-  * \(\sigma = 1 / \text{latent period}\)
-  * \(\gamma = 1 / \text{infectious period}\)
-  * \(\beta = R_0 \times \gamma\)
-* Chose initial conditions:
-  * **S = N - 1**
-  * **E = 1**
-  * **I = 0**
-  * **R = 0**
-* Simulated the epidemic over time using `deSolve`
-* Generated outputs:
-  * all-compartment plot
-  * infectious-only curve
-  * parameter table
-  * SEIR summary table  
+- Created `05_growth_rate_estimation.R`
+- Selected the **2022–2023 season**
+- Chose an early growth window manually
+- Smoothed weekly positives using a rolling mean
+- Created:
+  - a time index
+  - log-transformed case values
+- Fitted the model:
+  - `log_cases ~ time_index`
+- Produced:
+  - growth-phase plot
+  - log-linear fit plot
+  - summary table
 
 ---
 
-### Observations:
+## What I observed
 
-* The infectious curve showed:
-  * slow initial growth  
-  * gradual acceleration  
-  * a clear epidemic peak  
-* Peak infectious population:
-  * **~594 individuals**
-* Time to peak:
-  * **~273 days**
-* Susceptible population declined gradually
-* Recovered population increased steadily over time
+The early growth phase showed:
 
----
+- a clear increasing trend
+- approximately linear behaviour on the log scale
+
+Estimated growth rate:
 
-### Interpretation:
+- **r ≈ 0.215 per week**
+- **r ≈ 0.0307 per day**
 
-* Since **R₀ > 1**, the epidemic is self-sustaining  
-* Because **R₀ is only slightly above 1**, growth is:
-  * **moderate rather than explosive**
-* The epidemic peak occurs late because:
-  * transmission is sustained
-  * but not very strong  
-* The model produces a plausible epidemic wave consistent with the earlier growth-rate and R₀ estimates  
+This corresponds to:
 
+- approximately **24% weekly growth**
+- doubling time of approximately **23 days**
+
 ---
 
-### Understanding:
+## Interpretation
 
-* The SEIR model represents infection progression as:
-  * \(S \rightarrow E \rightarrow I \rightarrow R\)
-* The exposed compartment introduces:
-  * a biologically realistic delay before infectiousness
-* Initialising with:
-  * **one exposed person**
-  makes the epidemic start in a mechanistically consistent way
-* The relationship between parameters is:
-  * \(\sigma = 1/L\)
-  * \(\gamma = 1/D\)
-  * \(\beta = R_0 \gamma\)
+This was the first step where the project moved from descriptive analysis into quantitative epidemic inference.
 
----
+The near-linearity of the log-transformed series supported the idea that the selected window approximates:
+
+\[
+I(t) = I_0 e^{rt}
+\]
 
-### Key Insight:
+That matters because exponential growth is a core theoretical assumption used in early epidemic analysis.
 
-* Mechanistic models provide:
-  * a bridge between **estimated parameters** and **epidemic behaviour**
-* A modest reproduction number can still generate:
-  * a large epidemic wave
-  if transmission continues for long enough
-* Model behaviour is shaped not only by \(R_0\), but also by:
-  * latent period
-  * infectious period
-  * initial conditions
+The growth rate `r` is not yet a mechanistic parameter, but it is an important summary of how quickly the epidemic is expanding.
 
 ---
 
-### Limitations:
+## What I learned conceptually
 
-* This is a **theoretical simulation**, not yet fitted directly to observed case counts  
-* Population size is illustrative rather than data-derived  
-* Initial conditions are assumed  
-* Model does not yet include:
-  * seasonality
-  * stochastic effects
-  * changing contact patterns
-  * observation/reporting processes  
+This step clarified the difference between:
 
----
+- **epidemic shape**
+- **epidemic speed**
 
-### Outcome:
+The growth rate gives information about speed, not about the biological mechanism directly.
 
-* Successfully implemented a working SEIR model  
-* Linked earlier empirical estimates (**r**, **R₀**) to a mechanistic transmission framework  
-* Produced a full epidemic wave with:
-  * interpretable parameters
-  * meaningful epidemic dynamics  
+It also reinforced a major modelling principle:
 
----
+> The early epidemic phase is often the only phase where simple theoretical assumptions hold reasonably well.
+
+Once an epidemic approaches its peak, growth slows because of:
 
-### Next Step:
+- depletion of susceptibles
+- changing contact patterns
+- behaviour change
+- reporting dynamics
 
-* Compare SEIR simulation with observed influenza data
-* Explore model fit and possible extensions
+So the early growth window is special: it is the phase where clean estimation is most defensible.
 
 ---
-## SIRS Model Simulation Task
 
-### Completed:
+## Important methodological reflection
 
-* Created script `08_sirs_model.R`  
-* Extended SEIR framework to include **waning immunity**  
-* Defined a deterministic **SIRS compartmental model**:
-  * Susceptible  
-  * Infectious  
-  * Recovered → Susceptible (loss of immunity)  
+The growth phase was selected manually. That means the result depends partly on judgement.
 
-* Set epidemiological parameters:
-  * **infectious period = 3 days**
-  * **R₀ ≈ 1.16**
-  * **immunity duration = 365 days**
+This is not necessarily a flaw, but it does mean the estimate is sensitive to:
 
-* Calculated:
-  * \(\gamma = 1 / \text{infectious period}\)  
-  * \(\omega = 1 / \text{immunity duration}\)  
-  * \(\beta = R_0 \times \gamma\)
+- the chosen start date
+- the chosen end date
+- how strictly the phase resembles exponential growth
 
-* Initial conditions:
-  * **S = N - 1**
-  * **I = 1**
-  * **R = 0**
+That made me more aware that epidemic estimation often involves both:
 
-* Simulated dynamics over time using `deSolve`
-* Generated outputs:
-  * all-compartment plot  
-  * infectious curve  
-  * parameter table  
-  * SIRS summary table  
+- statistical fitting
+- epidemiological judgement
 
 ---
 
-### Observations:
+## Outcome
 
-* The infectious curve showed:
-  * a **faster and earlier peak** compared to SEIR  
-  * peak infectious population:
-    * **~1048 individuals**
-  * time to peak:
-    * **~159 days**
+I successfully estimated the early epidemic growth rate and established the first key quantitative parameter for later transmission modelling.
 
-* After the initial wave:
-  * infections decline  
-  * but **do not go to zero**
+---
+
+# 7. Reproduction Number Estimation
 
-* Susceptible population:
-  * drops initially  
-  * then **recovers over time**
+## Objective
 
-* Recovered population:
-  * increases  
-  * then **declines due to waning immunity**
+To convert the empirical growth rate into an epidemiologically interpretable transmission quantity: the reproduction number.
 
 ---
 
-### Interpretation:
+## What I completed
 
-* The key difference from SEIR:
-  **Immunity is temporary**
+- Created `06_rt_estimation.R`
+- Loaded the estimated growth rate
+- Assumed:
+  - latent period = 2 days
+  - infectious period = 3 days
+- Applied the SEIR-based approximation:
 
-* This leads to:
-  * replenishment of the susceptible pool  
-  * continued low-level transmission  
-  * potential for **recurrent waves**
+\[
+R_0 = (1 + rL)(1 + rD)
+\]
 
-* Unlike SEIR:
-  * epidemic does **not fully die out**
-  * system tends toward a **dynamic equilibrium**
+- Generated a summary table with:
+  - growth phase dates
+  - growth rate
+  - latent period
+  - infectious period
+  - estimated reproduction number
 
 ---
 
-### Understanding:
+## What I observed
 
-* The SIRS model represents:
-  * \(S \rightarrow I \rightarrow R \rightarrow S\)
+Estimated reproduction number:
 
-* New parameter introduced:
-  * \(\omega\): rate of immunity loss  
+- **R₀ ≈ 1.16**
 
-* Dynamics are governed by:
-  * \(\beta\): transmission  
-  * \(\gamma\): recovery  
-  * \(\omega\): waning immunity  
+This indicates:
 
-* Even with **R₀ only slightly above 1**:
-  * long-term persistence becomes possible  
-  * because susceptible individuals are continuously replenished  
+- transmission is above threshold
+- the epidemic is growing
+- transmission is sustained, but not explosive
 
 ---
 
-### Key Insight:
+## Interpretation
 
-* Adding waning immunity fundamentally changes epidemic behaviour:
+This was a major conceptual transition.
 
-| Model | Long-term behaviour |
-|------|--------------------|
-| SEIR | Single epidemic wave |
-| SIRS | Persistent / recurring transmission |
+The growth rate `r` tells me:
 
-* Epidemics are not just about **spread** — but also about:
-   **how immunity evolves over time**
+- how fast the epidemic is increasing
 
----
+The reproduction number `R₀` tells me:
+
+- why it is increasing
+
+With `R₀ ≈ 1.16`, each infected individual generates slightly more than one new infection on average. That may sound modest, but when sustained over multiple weeks it is enough to produce a substantial epidemic wave.
 
-### Limitations:
+This was one of the most important interpretive moments in the project:
 
-* Immunity duration is assumed (365 days)  
-* No seasonality included (important for influenza)  
-* Deterministic model (no stochastic variability)  
-* No vaccination or interventions  
-* Not yet fitted to observed data  
+> Large epidemics do not require very high reproduction numbers; they require sustained transmission above threshold.
 
 ---
 
-### Outcome:
+## What I learned conceptually
 
-* Successfully extended the model to include **reinfection dynamics**  
-* Demonstrated how **waning immunity sustains transmission**  
-* Produced a more realistic long-term epidemic structure  
+This step highlighted the difference between:
 
+- descriptive epidemic speed
+- mechanistic transmission potential
+
+It also showed the importance of embedding data into a disease model framework. By using latent and infectious periods, I moved from a purely statistical estimate to a biologically interpretable quantity.
+
+That made the project feel much more epidemiological rather than just statistical.
+
 ---
 
-### Next Step:
+## Limitations / caution
 
-* Fit model to observed data (**parameter estimation**)  
-* Compare SEIR vs SIRS fits  
-* Introduce seasonality and intervention effects  
+- latent and infectious periods were assumed, not estimated from this dataset
+- the formula is an approximation
+- this is an estimate of transmission potential during the selected early phase, not a full time-varying \(R_t\) trajectory
 
+Still, it was an appropriate and interpretable next step.
 
-## SEIR Model Fitting to Observed Data
+---
 
-### Objective
+## Outcome
 
-To connect the mechanistic SEIR model with real influenza surveillance data and evaluate how well the model explains observed epidemic dynamics.
+I successfully translated the growth estimate into a mechanistically meaningful transmission parameter, which became the basis for later compartmental models.
 
 ---
+
+# 8. SEIR Model Simulation
+
+## Objective
 
-### Completed
+To use the estimated transmission parameters to build a mechanistic epidemic model that simulates infection dynamics over time.
 
-* Implemented parameter estimation using `optim()`
-* Fitted SEIR model to **2022–2023 influenza season**
-* Restricted fitting to **early epidemic growth phase**
-* Defined observation model:
-  * observed_cases ≈ ρ × (σE)
+---
 
-* Estimated parameters:
-  * β (transmission rate)
-  * ρ (scaling factor)
+## What I completed
 
+- Created `07_seir_model.R`
+- Built a deterministic **SEIR model**
+- Compartments:
+  - Susceptible
+  - Exposed
+  - Infectious
+  - Recovered
+- Used:
+  - latent period = 2 days
+  - infectious period = 3 days
+  - \(R_0 \approx 1.16\)
+- Calculated:
+  - \(\sigma = 1/L\)
+  - \(\gamma = 1/D\)
+  - \(\beta = R_0 \gamma\)
+- Set initial conditions:
+  - \(S = N-1\)
+  - \(E = 1\)
+  - \(I = 0\)
+  - \(R = 0\)
+- Simulated dynamics with `deSolve`
+- Saved:
+  - compartment plots
+  - infectious curve
+  - parameter table
+  - summary table
+
 ---
+
+## What I observed
 
-### Key methodological improvement
+The SEIR model produced:
 
-* Initial attempt used:
-  * predicted_cases = ρ × I  
-  → resulted in poor model fit  
+- slow initial growth
+- gradual acceleration
+- a clear epidemic peak
+- steady decline after the peak
 
-* Corrected to:
-  * predicted_cases = ρ × σE  
-  → aligns with incidence (new infections)
+Summary:
 
-* This change significantly improved model realism and fit quality  
+- peak infectious population ≈ **594**
+- time to peak ≈ **273 days**
 
 ---
 
-### Results
+## Interpretation
 
-* Estimated parameters:
-  * β ≈ 0.402  
-  * R₀ ≈ 1.21  
-  * ρ ≈ 174  
+This was the stage where the project became a true mechanistic modelling exercise.
 
-* Model fit:
-  * RMSE ≈ 117  
-  * MAE ≈ 112  
+The SEIR model showed what the estimated transmission parameters imply dynamically. It translated abstract numbers such as `r` and `R₀` into an epidemic trajectory.
 
-* Peak timing:
-  * accurately captured by the model  
+The result was instructive:
 
+- even with only moderate transmission,
+- a large wave can still emerge,
+- but it emerges slowly
+
+The late peak reflected the fact that transmission was only modestly above threshold.
+
 ---
 
-### Observations
+## What I learned conceptually
 
-* The model:
-  * closely follows observed data during early growth  
-  * captures exponential increase in cases  
+The SEIR model introduced an important biological mechanism:
 
-* However:
-  * fails to reproduce full epidemic shape  
-  * does not capture sharp peak and decline  
+- the **latent compartment**
 
----
+That means infections do not become infectious instantly. This delay adds realism and changes epidemic timing.
 
-### Interpretation
+I also learned that model structure matters. Even with the same `R₀`, epidemic behaviour depends on:
 
-* SEIR assumptions hold primarily during:
-  * early epidemic phase  
+- latent period
+- infectious period
+- initial conditions
 
-* Later epidemic dynamics are influenced by:
-  * depletion of susceptibles  
-  * behavioural changes  
-  * seasonal variation  
-  * intervention effects  
+So `R₀` alone does not determine epidemic shape.
 
 ---
 
-### Key insight
+## Broader insight
 
-* Model validity depends on alignment between:
-  * theoretical assumptions  
-  * epidemiological phase  
+This was the first time I saw clearly how mechanistic models act as a bridge between:
 
-* Early growth phase is:
-  * the most informative window for estimating transmission parameters  
+- estimated parameters
+- biological assumptions
+- epidemic behaviour
 
-* Using the correct observation model (incidence vs prevalence) is critical  
+That bridge became one of the strongest themes of the project.
 
 ---
+
+## Limitations
+
+- theoretical simulation only
+- not yet fitted to observed case data
+- population size was illustrative
+- no seasonality
+- no stochasticity
+- no observation model
+- no behaviour change
+
+---
+
+## Outcome
+
+The SEIR model successfully connected empirical estimates to a mechanistic epidemic framework and showed how moderate transmission can still generate a substantial outbreak.
 
-### Conceptual understanding
+---
 
-* SEIR structure:
-  * S → E → I → R  
+# 9. SIRS Model Simulation
 
-* Incidence corresponds to:
-  * flow from E → I  
+## Objective
 
-* Observed case data reflects:
-  * new infections (incidence), not current infectious population  
+To extend the SEIR framework by incorporating **waning immunity** and investigate how this changes long-term epidemic behaviour.
 
 ---
 
-### Limitations
+## What I completed
 
-* Deterministic model (no stochasticity)
-* No seasonal forcing
-* No time-varying transmission
-* Population size assumed
-* No explicit observation/reporting process beyond scaling factor  
+- Created `08_sirs_model.R`
+- Implemented a deterministic **SIRS model**
+- Compartments:
+  - Susceptible
+  - Infectious
+  - Recovered
+  - Susceptible again through immunity loss
+- Assumed:
+  - infectious period = 3 days
+  - immunity duration = 365 days
+  - \(R_0 \approx 1.16\)
+- Calculated:
+  - \(\gamma = 1/D\)
+  - \(\omega = 1/\text{immunity duration}\)
+  - \(\beta = R_0 \gamma\)
+- Set initial state:
+  - \(S = N-1\)
+  - \(I = 1\)
+  - \(R = 0\)
+- Simulated the model over time
+- Saved plots and summary tables
 
 ---
+
+## What I observed
+
+Compared with SEIR, the SIRS model showed:
 
-### Learning outcome
+- a faster epidemic
+- a higher peak
+- an earlier time to peak
+- persistent low-level infection after the main wave
 
-* Successfully linked:
-  * empirical data  
-  * statistical estimation  
-  * mechanistic modelling  
+Summary:
 
-* Understood the importance of:
-  * model–data alignment  
-  * choosing correct epidemic phase  
-  * interpreting fitted parameters carefully  
+- peak infectious population ≈ **1048**
+- time to peak ≈ **159 days**
 
 ---
 
-### Next steps
+## Interpretation
 
-* Perform sensitivity analysis on key parameters:
-  * β, σ, γ  
+This was one of the clearest examples in the project of how changing one structural assumption can change everything.
 
-* Explore extended models:
-  * SIRS (waning immunity)  
-  * seasonal transmission  
+The difference is not simply mathematical; it is epidemiological.
 
-* Compare model outputs with full epidemic curves  
+In SEIR:
 
+- recovered individuals leave transmission permanently
 
+In SIRS:
 
+- recovered individuals eventually return to susceptibility
 
-# Overall Project Understanding
+That means the susceptible pool is replenished, which allows transmission to continue.
 
-## Current Status:
+This is much more consistent with influenza, where immunity is:
 
-* Setup completed
-* Data cleaned and structured
-* Epidemic patterns explored
-* Waves identified
-* Growth rate estimated
-* Reproduction number estimated
-* SEIR model implemented
+- incomplete
+- temporary
+- affected by antigenic drift
 
 ---
+
+## What I learned conceptually
+
+The SIRS model changed my understanding of what kind of system influenza really is.
+
+SEIR is suitable for:
 
-## Key Conceptual Insight:
+- a single epidemic wave
+- a permanently immunising infection
 
-* The dataset represents:
-  * **a sequence of repeated epidemic processes**
-* Each season:
-  * is an independent epidemic
-  * has its own transmission dynamics
+SIRS is more suitable for:
 
-* Epidemic modelling workflow:
-  1. Identify epidemic structure  
-  2. Isolate epidemic phases  
-  3. Estimate growth dynamics (**r**)  
-  4. Translate to epidemiological parameters (**R₀**)  
-  5. Build mechanistic models (**SEIR**)  
-  6. Compare theory with observed epidemic behaviour  
+- recurrent transmission
+- infections with imperfect or waning immunity
 
+This stage taught me that **model realism is often determined by structural assumptions**, not just parameter values.
+
 ---
 
-## Sensitivity Analysis of SEIR Model
+## Important reflection
 
-### Objective
+At this point I understood why influenza cannot be fully captured by a one-wave model. Seasonal influenza returns repeatedly, and any realistic long-term model must somehow allow transmission to restart.
 
-To evaluate how changes in key epidemiological parameters influence the behaviour of the SEIR model and assess the robustness of model predictions.
+Waning immunity is one such mechanism.
 
 ---
+
+## Limitations
+
+- immunity duration assumed, not estimated
+- no seasonality
+- no vaccination
+- no strain replacement
+- still not fitted to observed long-term data
 
-### Completed
+---
 
-* Performed one-way sensitivity analysis on the SEIR model
-* Used fitted parameters from the **2022–2023 growth phase**
-* Varied key parameters:
-  * β (transmission rate)
-  * latent period
-  * infectious period  
+## Outcome
 
-* Simulated epidemic trajectories for each scenario
-* Computed summary metrics:
-  * peak infectious population  
-  * time to peak  
-  * final epidemic size  
+The SIRS model demonstrated how immunity loss can sustain transmission and provided a more realistic conceptual model of influenza persistence.
 
 ---
 
-### Methodological approach
+# 10. SEIR Model Fitting to Observed Data
 
-* Each parameter was varied independently while holding others constant  
-* Parameter ranges:
-  * β: ±20% around fitted value  
-  * latent period: 1–5 days  
-  * infectious period: 2–6 days  
+## Objective
 
-* Used deterministic SEIR model to simulate epidemic dynamics over time  
+To connect the mechanistic SEIR model directly to observed surveillance data and estimate model parameters from data rather than only simulating from assumed values.
 
 ---
 
-### Results
+## What I completed
 
-* β variation:
-  * strong impact on epidemic size and speed  
-  * higher β → larger and faster epidemics  
+- Implemented model fitting using `optim()`
+- Focused on the **2022–2023 growth phase**
+- Defined the observation model:
 
-* Latent period variation:
-  * longer latent period → slower epidemic  
-  * reduced peak and final size  
+\[
+\text{observed cases} \approx \rho \times (\sigma E)
+\]
 
-* Infectious period variation:
-  * longer infectious period → very large increase in peak infections  
-  * earlier peaks and significantly larger epidemic size  
+- Estimated:
+  - \(\beta\) (transmission rate)
+  - \(\rho\) (scaling factor)
 
 ---
+
+## Important methodological correction
+
+Initially I tried to relate observed cases to:
 
-### Observations
+\[
+\rho \times I
+\]
 
-* Epidemic dynamics are highly sensitive to:
-  * transmission rate  
-  * infectious duration  
+This produced poor fits.
 
-* Small parameter changes can lead to:
-  * large differences in epidemic outcomes  
+I then corrected the model to relate observed cases to:
 
-* Latent period mainly affects:
-  * timing and delay of transmission  
-  * rather than magnitude  
+\[
+\rho \times \sigma E
+\]
 
+This was a much better choice because observed detections correspond more closely to **new infections becoming infectious** than to the current infectious population size.
+
+This change made the model-data relationship much more coherent.
+
 ---
+
+## What I observed
+
+Estimated parameters:
+
+- \(\beta \approx 0.402\)
+- \(R_0 \approx 1.21\)
+- \(\rho \approx 174\)
+
+Model performance:
 
-### Interpretation
+- RMSE ≈ **117**
+- MAE ≈ **112**
 
-* β controls:
-  * how quickly infections spread  
+The fit captured:
 
-* Infectious period controls:
-  * how long individuals contribute to transmission  
+- early exponential growth
+- correct timing of the growth-phase peak
 
-* Latent period controls:
-  * delay between exposure and infectiousness  
+But it did **not** reproduce the full season’s epidemic shape.
 
 ---
 
-### Key insight
+## Interpretation
 
-* Epidemic models are highly sensitive to parameter assumptions  
+This step was crucial because it showed that the SEIR model is most appropriate for:
 
-* In particular:
-  * small increases in β or infectious period  
-    → can lead to disproportionately large epidemics  
+- the early epidemic phase
+- when exponential growth assumptions are approximately valid
 
-* This highlights the importance of:
-  * accurate parameter estimation  
-  * understanding uncertainty in model inputs  
+It also showed that using the correct observation model is essential.
 
+A mechanistic model can only fit well if the model state being compared to data actually corresponds to what the data measure.
+
+This was one of the strongest methodological lessons in the project.
+
 ---
+
+## What I learned conceptually
 
-### Conceptual understanding
+There are two separate challenges in epidemic modelling:
 
-* SEIR model behaviour depends on:
-  * interaction between transmission (β), progression (σ), and recovery (γ)
+1. specifying biological dynamics correctly
+2. linking those dynamics to what is actually observed
 
-* Epidemic size and timing are emergent properties of:
-  * these interacting parameters  
+The second part is often underappreciated.
 
-* Sensitivity analysis helps identify:
-  * which parameters dominate model behaviour  
+In this project, the surveillance data reflect **reported detections**, not direct counts of infectious individuals. That means the observation layer matters.
 
+I also learned that model validity depends on aligning:
+
+- the model structure
+- the epidemic phase
+- the observed variable
+
 ---
+
+## Broader reflection
 
-### Limitations
+The fact that SEIR fit the growth phase but not the full epidemic was not a failure; it was a result.
 
-* One-way sensitivity analysis only (no interaction effects)
-* Deterministic model (no stochastic variation)
-* No seasonal forcing
-* Parameter ranges are assumed, not estimated from uncertainty distributions  
+It showed that:
 
+- the early phase behaves approximately like a simple mechanistic epidemic
+- the full season is affected by many additional forces:
+  - seasonality
+  - behaviour
+  - susceptible depletion
+  - changing contact rates
+  - reporting effects
+
+That result justified the later move toward more realistic models.
+
 ---
 
-### Learning outcome
+## Limitations
 
-* Developed understanding of:
-  * how model parameters influence epidemic behaviour  
-  * which parameters are most critical  
+- deterministic model
+- no seasonal forcing
+- no stochasticity
+- assumed population size
+- no time-varying transmission
+- simplified observation model
 
-* Recognised that:
-  * model predictions are highly dependent on parameter values  
+---
 
-* Gained insight into:
-  * robustness and uncertainty in epidemiological modelling  
+## Outcome
 
+I successfully fitted the SEIR model to observed early-phase data and learned how important model–data alignment is in epidemiological inference.
+
 ---
+
+# 11. Sensitivity Analysis
 
-### Next steps
+## Objective
 
-* Extend to multi-parameter sensitivity analysis  
-* Incorporate uncertainty ranges for parameters  
-* Explore seasonal SEIR model  
-* Compare sensitivity results with SIRS model dynamics  
+To examine how sensitive SEIR model behaviour is to changes in key parameters and to identify which parameters most strongly influence epidemic outcomes.
 
-## SEIR vs SIRS Model Comparison
+---
 
-### Objective
+## What I completed
 
-To understand how the inclusion of waning immunity changes epidemic behaviour and to compare the conceptual roles of the SEIR and SIRS models in influenza modelling.
+- Performed one-way sensitivity analysis
+- Used the fitted 2022–2023 growth-phase parameters as baseline
+- Varied:
+  - transmission rate \(\beta\)
+  - latent period
+  - infectious period
+- Computed:
+  - peak infectious population
+  - time to peak
+  - final epidemic size
 
 ---
 
-### Completed
+## What I observed
 
-* Compared outputs from the SEIR and SIRS simulations
-* Examined differences in:
-  * peak infectious population
-  * time to peak
-  * long-term epidemic behaviour
+Main findings:
 
+- increasing \(\beta\):
+  - increased epidemic size
+  - increased peak height
+  - caused earlier peaks
+- increasing infectious period:
+  - caused very large increases in epidemic burden
+- increasing latent period:
+  - slowed the epidemic
+  - reduced peak size
+  - reduced total epidemic size
+
 ---
+
+## Interpretation
 
-### Results
+This stage showed that the SEIR model is particularly sensitive to:
 
-* The SEIR model produced:
-  * a smaller peak
-  * a later peak
-  * a single epidemic wave that eventually dies out
+- transmission intensity
+- duration of infectiousness
 
-* The SIRS model produced:
-  * a larger peak
-  * an earlier peak
-  * persistent low-level transmission after the main epidemic wave
+This makes intuitive sense:
 
+- higher transmission means infections spread more efficiently
+- longer infectiousness means each infected person has more time to generate secondary infections
+
+The latent period had a different effect. It mainly slowed the timing of spread rather than amplifying it.
+
 ---
+
+## What I learned conceptually
 
-### Observations
+Sensitivity analysis taught me that epidemic models are not just about point estimates. They are systems whose behaviour can change substantially under small parameter perturbations.
 
-* Introducing waning immunity substantially changed model dynamics
-* The epidemic became:
-  * faster
-  * larger
-  * more persistent
+This is important because many epidemiological parameters are uncertain in real life.
 
-* This showed that immunity assumptions strongly influence model behaviour
+So a model output is never just “the answer”; it is conditional on assumptions.
 
+That changed how I interpreted compartmental models:
+
+> A model is not only a prediction tool, but also a framework for understanding parameter dependence.
+
 ---
+
+## Broader insight
 
-### Interpretation
+This step also provided a public health interpretation.
 
-* In the SEIR model:
-  * recovered individuals are permanently removed from transmission
+If a disease is highly sensitive to transmission rate and infectious period, then interventions that reduce:
 
-* In the SIRS model:
-  * recovered individuals eventually re-enter the susceptible pool
+- contact rates
+- transmission probability
+- duration of infectiousness
 
-* This replenishment of susceptibles allows:
-  * continued transmission
-  * potential recurrence of infection
+can have disproportionately large epidemic effects.
 
+So sensitivity analysis helped connect the mathematical model to intervention thinking.
+
 ---
 
-### Key insight
+## Limitations
 
-* The difference between SEIR and SIRS is not only mathematical
-* It changes the epidemiological meaning of the model
+- one-way sensitivity only
+- no interaction effects
+- deterministic framework
+- no uncertainty distributions
+- no seasonal forcing
+
+---
 
-* SEIR is more suitable for:
-  * a single epidemic wave
+## Outcome
 
-* SIRS is more suitable for:
-  * infections like influenza, where immunity is temporary
+I identified the parameters that most strongly govern epidemic magnitude and timing, and I gained a much stronger intuition for how compartmental models respond to epidemiological assumptions.
 
 ---
 
-### Conceptual understanding
+# 12. SEIR vs SIRS Comparison
 
-* Epidemic dynamics depend not only on transmission rate
-* They also depend on:
-  * duration of immunity
-  * whether recovered individuals remain protected
+## Objective
 
-* Adding waning immunity makes the model more realistic for influenza
+To compare the epidemic dynamics implied by permanent immunity (SEIR) versus waning immunity (SIRS), and assess which framework is more appropriate for influenza.
 
 ---
 
-### Limitations
+## What I completed
 
-* The comparison is based on simulated outputs rather than fitted long-term data
-* The SIRS model still does not include:
-  * seasonality
-  * strain variation
-  * vaccination
-  * behavioural change
+- Compared SEIR and SIRS simulation outputs
+- Examined differences in:
+  - peak size
+  - time to peak
+  - long-term behaviour
+  - final epidemic state
 
 ---
 
-### Learning outcome
+## What I observed
 
-* Understood how structural model assumptions affect epidemic behaviour
-* Learned that immunity loss is a major mechanism shaping recurrent influenza transmission
-* Recognised that model comparison is useful for linking biological realism to mathematical structure
+SEIR produced:
 
+- lower peak
+- later peak
+- a single epidemic wave
+- no mechanism for recurrence
+
+SIRS produced:
+
+- higher peak
+- earlier peak
+- persistent low-level transmission
+- ongoing vulnerability due to susceptibility replenishment
+
 ---
+
+## Interpretation
+
+This comparison made the role of immunity assumptions very clear.
+
+The difference between SEIR and SIRS is not a small refinement; it changes the entire interpretation of the epidemic system.
 
-### Next steps
+In SEIR:
 
-* Compare SEIR and SIRS visually in a combined plot
-* Explore whether SIRS better explains repeated seasonal influenza patterns
-* Extend to seasonal transmission models
+- immunity is effectively permanent
+- transmission eventually exhausts itself
 
-## SEIR vs SIRS Model Comparison
+In SIRS:
 
-### Objective
+- immunity decays
+- the system can sustain or regenerate transmission
 
-To evaluate how different epidemiological assumptions (permanent vs waning immunity) affect epidemic dynamics and model behaviour.
+For influenza, this is much more plausible because influenza immunity is shaped by:
 
+- waning immune protection
+- partial cross-immunity
+- viral evolution
+
 ---
+
+## What I learned conceptually
+
+I learned that model selection should follow disease biology.
+
+SEIR is useful for:
+
+- understanding a single outbreak wave
+- capturing early epidemic dynamics
 
-### Completed
+SIRS is better for:
 
-* Implemented both SEIR and SIRS models  
-* Simulated epidemic trajectories for each model  
-* Compared:
-  * infectious curves  
-  * peak size  
-  * time to peak  
-  * final epidemic state  
+- recurrent pathogens
+- long-term persistence
+- diseases where immunity is not permanent
 
+This was one of the strongest examples in the project of how biological realism matters.
+
 ---
 
-### Key observations
+## Limitations
 
-* The two models produce **qualitatively different epidemic behaviour**
+- comparison based on simulation outputs
+- not a long-term fitted comparison
+- no seasonal forcing in the basic SIRS version
+- still simplified relative to real influenza epidemiology
+
+---
 
-#### SEIR model:
-* Single epidemic wave  
-* Slow increase and delayed peak  
-* Infection eventually dies out  
+## Outcome
 
-#### SIRS model:
-* Faster epidemic growth  
-* Earlier and higher peak  
-* Persistent low-level transmission  
+This stage clarified that **SIRS is a more realistic long-term conceptual framework for influenza than SEIR**, even though SEIR remains useful for short-term epidemic analysis.
 
 ---
 
-### Key insight
+# 13. Seasonal Forcing Extension
 
-* The inclusion of **waning immunity** dramatically changes model dynamics  
+## Objective
 
-* In SIRS:
-  * recovered individuals return to susceptible  
-  * the population remains partially vulnerable  
-  * infection can persist and re-emerge  
+To incorporate time-varying transmission into the model and examine whether combining seasonality with waning immunity can generate realistic recurrent influenza-like dynamics.
 
 ---
 
-### Interpretation
+## What I completed
 
-* Influenza is characterised by:
-  * antigenic drift  
-  * partial immunity  
-  * repeated seasonal outbreaks  
+- Extended the SIRS model with seasonal forcing
+- Defined transmission as:
 
-* Therefore:
-  * SEIR assumptions are **too restrictive**  
-  * SIRS provides a **more realistic representation**  
+\[
+\beta(t) = \beta_0 \left(1 + \alpha \cos\left(\frac{2\pi t}{365}\right)\right)
+\]
 
+- Simulated multi-year epidemic behaviour
+- Explored how seasonal transmission interacts with waning immunity
+
 ---
 
-### Conceptual understanding
+## What I observed
 
-* SEIR assumes:
-  * S → E → I → R (permanent immunity)
+The seasonal SIRS model produced:
 
-* SIRS assumes:
-  * S → E → I → R → S (waning immunity)
+- recurrent epidemic waves
+- oscillating transmission over time
+- epidemic peaks that arose naturally without manually restarting the model
 
-* This feedback loop:
-  * prevents full depletion of susceptibles  
-  * enables ongoing transmission  
+This was the first model in the project that visually resembled the long-term seasonal character of influenza.
 
 ---
+
+## Interpretation
+
+This was the most realistic model in the project.
 
-### Model behaviour insight
+At this stage, the project moved beyond “one epidemic wave” and toward a genuine seasonal epidemic system.
 
-* Small structural changes in models can lead to:
-  * large differences in epidemic outcomes  
+The key mechanism became clear:
 
-* Key drivers of epidemic dynamics:
-  * transmission rate (β)  
-  * duration of infectiousness (γ⁻¹)  
-  * immunity duration  
+1. transmission rises seasonally
+2. outbreaks occur
+3. immunity builds
+4. immunity wanes
+5. seasonal transmission rises again
+6. another outbreak becomes possible
 
+This combination of:
+
+- environmental forcing
+- susceptible replenishment
+
+is what makes influenza a recurrent seasonal process.
+
 ---
+
+## What I learned conceptually
+
+This step taught me that:
+
+> Influenza dynamics are not driven by transmission alone.
 
-### Limitations
+They emerge from the interaction of:
 
-* Deterministic models (no stochastic variation)  
-* No seasonal forcing (β constant)  
-* No behavioural changes  
-* No vaccination or intervention effects  
+- transmission
+- immunity
+- season
 
+Neither SEIR alone nor non-seasonal SIRS alone fully captures that.
+
+The seasonal SIRS model was the point where the project’s mechanistic explanation became most aligned with the observed data structure.
+
 ---
+
+## Broader reflection
 
-### Learning outcome
+This stage also showed why long-term epidemic modelling is hard.
 
-* Developed understanding of:
-  * how model structure affects epidemic dynamics  
-  * importance of biological realism in modelling  
+As soon as time-varying transmission is introduced, the model becomes:
 
-* Learned that:
-  * model assumptions must match disease characteristics  
-  * otherwise predictions can be misleading  
+- more realistic
+- but also more difficult to fit and validate
 
+That tension between realism and tractability became a recurring theme.
+
 ---
+
+## Limitations
+
+- seasonal amplitude chosen heuristically
+- not fully calibrated to the entire multi-year series
+- no stochasticity
+- no strain structure
+- no vaccination
+- no age structure
+- no explicit reporting layer
 
-### Key takeaway
+---
 
-* SEIR explains **single outbreaks**  
-* SIRS explains **recurrent epidemics**  
+## Outcome
 
-* For influenza:
-  * **SIRS is the more appropriate modelling framework**  
+The seasonal SIRS model provided the strongest conceptual explanation of recurrent influenza dynamics in the project.
 
 ---
 
-## Seasonal Forcing Extension
+# 14. Decision on Scope and Stopping Point
 
-### What I did
+## Objective
 
-* Extended the SIRS model by introducing **time-varying transmission β(t)**
-* Implemented seasonal forcing using a cosine function
-* Simulated long-term epidemic dynamics over multiple years  
+To assess whether full multi-year fitting of the seasonal SIRS model was feasible within the project and decide on a defensible endpoint.
 
 ---
+
+## What I attempted
 
-### What I learned
+I explored fitting the seasonal SIRS model to the full multi-year surveillance series.
 
-* Real epidemic data (2015–2026) shows:
-  * repeated seasonal waves  
-  * not a single epidemic  
+This introduced problems such as:
 
-* This cannot be explained by:
-  * SEIR → lacks recurrence  
-  * basic SIRS → lacks timing  
+- numerical instability
+- integration failure
+- optimisation difficulties
+- identifiability issues
 
 ---
+
+## Interpretation
+
+This was an important learning moment.
+
+I realised that full long-term calibration of a seasonal epidemic model is not just “the next script”; it is a substantially more advanced modelling problem.
 
-### Key concepts
+The challenge is not only computational. It is also conceptual.
 
-* Transmission is not constant:
+Repeated influenza seasons are influenced by:
 
-  * β = β(t), not β = constant  
+- seasonal forcing
+- waning immunity
+- viral evolution
+- contact changes
+- surveillance variation
+- the COVID disruption period
 
-* Seasonal forcing is essential for diseases like influenza  
+So even if a model is biologically more realistic, that does not mean it is straightforward to fit.
 
 ---
 
-### Understanding the mechanism
+## What I learned conceptually
 
-* Epidemic waves arise from interaction of:
+This stage taught me a very important modelling lesson:
 
-  1. Seasonal increase in β(t)
-  2. Build-up of susceptible individuals (via waning immunity)
+> A more realistic model is not always a more usable model.
 
-* This creates a **cycle**:
+Good modelling practice includes knowing when to stop, and when a simulation-based extension is more defensible than an unstable fitted model.
 
-  * low transmission → susceptibles accumulate  
-  * winter → transmission increases → outbreak  
-  * recovery → immunity increases → decline  
-  * immunity wanes → next wave possible  
+This decision did not weaken the project. In fact, it strengthened it, because it showed that I could distinguish between:
 
+- meaningful extension
+- overreaching complexity
+
 ---
+
+## Outcome
+
+I decided to stop at the **seasonal SIRS simulation stage**.
 
-### Insight from plots
+This was appropriate because the core conceptual objective had already been achieved:
 
-* β(t) shows clear yearly oscillation  
-* Infectious curve follows seasonal pattern  
-* Multiple epidemic peaks emerge naturally  
+- early growth dynamics were estimated from data
+- short-term transmission was modelled mechanistically
+- immunity loss was incorporated
+- long-term recurrent seasonal behaviour was demonstrated
 
 ---
 
-### Why this matters
+# 15. Dashboard Development
 
-* This model aligns with real-world influenza epidemiology:
+## Objective
 
-  * winter peaks  
-  * annual cycles  
-  * recurring outbreaks  
+To build an interactive Shiny dashboard that presents the main results of the project in a clear, visual, and accessible way.
 
-* It demonstrates how:
+---
 
-  * mechanistic models + realistic assumptions  
-  → can reproduce observed data patterns  
+## What I completed
 
+- Developed a Shiny dashboard (`app.R`)
+- Included tabs for:
+  - Overview
+  - EDA
+  - Growth and Fit
+  - Sensitivity Analysis
+  - Model Comparison
+- Added:
+  - season selectors
+  - download buttons
+  - value boxes
+  - interactive plot switching
+  - project notes and interpretation labels
+
 ---
+
+## Interpretation
 
-### Key takeaway
+The dashboard changed the project from a purely script-based workflow into an interactive analytical product.
 
-* The most realistic influenza model in this project is:
+This mattered because it allowed results to be:
 
-  → **Seasonally forced SIRS model**
+- explored visually
+- communicated more clearly
+- connected across analysis stages
 
-* It integrates:
+It also made me think differently about presentation. A dashboard forces you to decide:
 
-  * transmission dynamics (β)  
-  * recovery (γ)  
-  * waning immunity (ω)  
-  * environmental forcing (seasonality)  
+- what the most important outputs are
+- how a user navigates results
+- which plots are most interpretable
 
 ---
 
-### Next steps
+## What I learned conceptually
 
-* Fit seasonal model to full dataset (2015–2026)
-* Estimate seasonal amplitude (α) from data
-* Compare predicted vs observed multi-year trends
-* Explore stochastic models for variability  
+I learned that communicating epidemic models is not only about equations and scripts. It is also about interface design and interpretability.
 
+This stage also reinforced the importance of:
+
+- linking outputs across stages
+- making model comparison intuitive
+- making assumptions explicit to the user
+
+---
+
+## Outcome
+
+The dashboard became a final integration layer for the project, connecting data analysis, modelling, interpretation, and presentation in one place.
+
 ---
+
+# 16. Final Overall Understanding
+
+## What this project taught me
+
+At the beginning, I thought of influenza data mainly as a time series to analyse. By the end, I understood it as a **seasonally recurring epidemic system**.
+
+The project changed my perspective in several major ways.
+
+### 1. The data are not a single epidemic
+
+The full surveillance record is not best understood as one continuous epidemic, but as:
 
-## Overall Project Insight (Final)
+- repeated epidemic waves
+- shaped by changing conditions
+- requiring seasonal interpretation
 
-* Influenza is not a single epidemic:
-  * it is a **recurrent seasonal process**
+### 2. Early epidemic phases are uniquely informative
 
-* Proper modelling requires:
+The early growth phase is the part of the epidemic where:
 
-  * time-varying transmission  
-  * immune waning  
-  * multi-year simulation  
+- exponential growth assumptions are most reasonable
+- transmission parameters are most identifiable
+- simple models are most useful
 
-* Model progression in this project:
+### 3. Model structure matters as much as parameter values
 
-  1. Growth rate (r) → early dynamics  
-  2. SEIR → mechanistic single-wave model  
-  3. SIRS → recurrent dynamics  
-  4. Seasonal SIRS → realistic influenza model  
+A key lesson was that epidemic behaviour is shaped not only by:
 
-* Final understanding:
+- how large `R₀` is
+- but by the structure of the model itself
 
-  → Epidemic patterns emerge from **mechanisms + environment**, not just data  
+Examples:
 
+- SEIR adds latent delay
+- SIRS adds immunity loss
+- seasonal SIRS adds environmental forcing
+
+Each structural change changes the interpretation of the epidemic.
+
+### 4. Realistic modelling requires balancing complexity and tractability
+
+A model can be:
+
+- too simple to be realistic
+- or too complex to fit reliably
+
+The project taught me that good modelling lies in balancing:
+
+- realism
+- interpretability
+- identifiability
+- scope
+
+### 5. Mechanistic models are explanatory tools
+
+I now see compartmental models not just as predictive devices, but as tools for asking:
+
+- what mechanism could produce this epidemic pattern?
+- what assumption explains recurrence?
+- what parameter controls timing versus size?
+
+---
+
+## Final project interpretation
+
+The final conceptual picture that emerged is:
+
+> Influenza is a recurrent seasonal epidemic process driven by the interaction of transmission, immunity, and environmental forcing.
+
+The progression of models in this project reflects that understanding:
+
+1. **Growth rate** → epidemic speed  
+2. **Reproduction number** → transmission potential  
+3. **SEIR** → mechanistic single-wave model  
+4. **SIRS** → immunity loss and persistence  
+5. **Seasonal SIRS** → recurrent influenza-like dynamics  
+
 ---
+
+## Final personal learning outcome
 
-### Decision on project scope
+This project helped me grow in three ways:
 
-I attempted to extend the work further by fitting a seasonal SIRS model to the full multi-year dataset. However, this introduced numerical instability and optimisation difficulties, which highlighted that full long-term calibration of seasonal epidemic models is a substantially more advanced task.
+### Statistical understanding
+I learned how to move from descriptive data analysis to parameter estimation.
 
-Rather than forcing an unstable fitting procedure, I decided to stop at the seasonal SIRS simulation stage. This was an appropriate decision because the main conceptual objective had already been achieved: demonstrating how seasonal transmission and waning immunity together can generate recurrent influenza epidemic patterns.
+### Epidemiological understanding
+I learned how to interpret epidemic behaviour in terms of transmission, immunity, and phase structure.
 
-This also reinforced an important modelling lesson: not every biologically realistic model is easy to fit reliably, and good modelling practice includes recognising when a simpler, interpretable, and well-supported endpoint is more appropriate.
+### Modelling understanding
+I learned that model choice is not just technical. It reflects biological assumptions, data limitations, and analytic goals.
+
 ---
+
+## Closing reflection
+
+The most important lesson from this project is that epidemic modelling is not simply about fitting curves.
+
+It is about:
+
+- understanding what the data represent
+- identifying which assumptions are valid in which phase
+- selecting models that match the disease process
+- interpreting results within the limits of both the data and the model
+
+That shift — from “running models” to **thinking mechanistically and critically about epidemics** — is the biggest thing I learned from this work.

@@ -1,0 +1,11 @@
+parameter,value
+N,100000
+beta0,0.4022739282492852
+alpha,0.25
+infectious_period,3
+gamma,0.3333333333333333
+immunity_duration,365
+omega,0.0027397260273972603
+S0,99999
+I0,1
+R0_initial,0
