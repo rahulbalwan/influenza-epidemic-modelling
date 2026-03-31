@@ -1022,3 +1022,227 @@ To evaluate how changes in key epidemiological parameters influence the behaviou
 * Incorporate uncertainty ranges for parameters  
 * Explore seasonal SEIR model  
 * Compare sensitivity results with SIRS model dynamics  
+
+## SEIR vs SIRS Model Comparison
+
+### Objective
+
+To understand how the inclusion of waning immunity changes epidemic behaviour and to compare the conceptual roles of the SEIR and SIRS models in influenza modelling.
+
+---
+
+### Completed
+
+* Compared outputs from the SEIR and SIRS simulations
+* Examined differences in:
+  * peak infectious population
+  * time to peak
+  * long-term epidemic behaviour
+
+---
+
+### Results
+
+* The SEIR model produced:
+  * a smaller peak
+  * a later peak
+  * a single epidemic wave that eventually dies out
+
+* The SIRS model produced:
+  * a larger peak
+  * an earlier peak
+  * persistent low-level transmission after the main epidemic wave
+
+---
+
+### Observations
+
+* Introducing waning immunity substantially changed model dynamics
+* The epidemic became:
+  * faster
+  * larger
+  * more persistent
+
+* This showed that immunity assumptions strongly influence model behaviour
+
+---
+
+### Interpretation
+
+* In the SEIR model:
+  * recovered individuals are permanently removed from transmission
+
+* In the SIRS model:
+  * recovered individuals eventually re-enter the susceptible pool
+
+* This replenishment of susceptibles allows:
+  * continued transmission
+  * potential recurrence of infection
+
+---
+
+### Key insight
+
+* The difference between SEIR and SIRS is not only mathematical
+* It changes the epidemiological meaning of the model
+
+* SEIR is more suitable for:
+  * a single epidemic wave
+
+* SIRS is more suitable for:
+  * infections like influenza, where immunity is temporary
+
+---
+
+### Conceptual understanding
+
+* Epidemic dynamics depend not only on transmission rate
+* They also depend on:
+  * duration of immunity
+  * whether recovered individuals remain protected
+
+* Adding waning immunity makes the model more realistic for influenza
+
+---
+
+### Limitations
+
+* The comparison is based on simulated outputs rather than fitted long-term data
+* The SIRS model still does not include:
+  * seasonality
+  * strain variation
+  * vaccination
+  * behavioural change
+
+---
+
+### Learning outcome
+
+* Understood how structural model assumptions affect epidemic behaviour
+* Learned that immunity loss is a major mechanism shaping recurrent influenza transmission
+* Recognised that model comparison is useful for linking biological realism to mathematical structure
+
+---
+
+### Next steps
+
+* Compare SEIR and SIRS visually in a combined plot
+* Explore whether SIRS better explains repeated seasonal influenza patterns
+* Extend to seasonal transmission models
+
+## SEIR vs SIRS Model Comparison
+
+### Objective
+
+To evaluate how different epidemiological assumptions (permanent vs waning immunity) affect epidemic dynamics and model behaviour.
+
+---
+
+### Completed
+
+* Implemented both SEIR and SIRS models  
+* Simulated epidemic trajectories for each model  
+* Compared:
+  * infectious curves  
+  * peak size  
+  * time to peak  
+  * final epidemic state  
+
+---
+
+### Key observations
+
+* The two models produce **qualitatively different epidemic behaviour**
+
+#### SEIR model:
+* Single epidemic wave  
+* Slow increase and delayed peak  
+* Infection eventually dies out  
+
+#### SIRS model:
+* Faster epidemic growth  
+* Earlier and higher peak  
+* Persistent low-level transmission  
+
+---
+
+### Key insight
+
+* The inclusion of **waning immunity** dramatically changes model dynamics  
+
+* In SIRS:
+  * recovered individuals return to susceptible  
+  * the population remains partially vulnerable  
+  * infection can persist and re-emerge  
+
+---
+
+### Interpretation
+
+* Influenza is characterised by:
+  * antigenic drift  
+  * partial immunity  
+  * repeated seasonal outbreaks  
+
+* Therefore:
+  * SEIR assumptions are **too restrictive**  
+  * SIRS provides a **more realistic representation**  
+
+---
+
+### Conceptual understanding
+
+* SEIR assumes:
+  * S → E → I → R (permanent immunity)
+
+* SIRS assumes:
+  * S → E → I → R → S (waning immunity)
+
+* This feedback loop:
+  * prevents full depletion of susceptibles  
+  * enables ongoing transmission  
+
+---
+
+### Model behaviour insight
+
+* Small structural changes in models can lead to:
+  * large differences in epidemic outcomes  
+
+* Key drivers of epidemic dynamics:
+  * transmission rate (β)  
+  * duration of infectiousness (γ⁻¹)  
+  * immunity duration  
+
+---
+
+### Limitations
+
+* Deterministic models (no stochastic variation)  
+* No seasonal forcing (β constant)  
+* No behavioural changes  
+* No vaccination or intervention effects  
+
+---
+
+### Learning outcome
+
+* Developed understanding of:
+  * how model structure affects epidemic dynamics  
+  * importance of biological realism in modelling  
+
+* Learned that:
+  * model assumptions must match disease characteristics  
+  * otherwise predictions can be misleading  
+
+---
+
+### Key takeaway
+
+* SEIR explains **single outbreaks**  
+* SIRS explains **recurrent epidemics**  
+
+* For influenza:
+  * **SIRS is the more appropriate modelling framework**  
+
+---

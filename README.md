@@ -454,6 +454,152 @@ source("run_all.R")
     * latent and infectious periods  
 
 
+
+---
+## SEIR vs SIRS Model Comparison
+
+### Objective
+
+To compare the epidemic dynamics produced by the SEIR and SIRS models and assess how the inclusion of waning immunity changes model behaviour and interpretation.
+
+---
+
+### Comparison focus
+
+* Compare the two models in terms of:
+  * peak infectious population
+  * time to peak
+  * long-term epidemic behaviour
+  * biological interpretation
+
+---
+## SEIR vs SIRS Model Comparison
+
+### Objective
+
+To compare the behaviour of the SEIR and SIRS models and evaluate which framework better captures influenza epidemic dynamics.
+
+---
+
+### Models compared
+
+* **SEIR model**
+  * Includes latent (exposed) stage
+  * Assumes permanent immunity after recovery  
+
+* **SIRS model**
+  * Includes waning immunity
+  * Allows recovered individuals to return to susceptible class  
+
+---
+
+### Comparison approach
+
+The models were compared using:
+
+* Infectious population over time  
+* Peak infectious population  
+* Time to peak  
+* Final epidemic state (S, I, R compartments)  
+
+---
+
+### Key results
+
+| Metric                  | SEIR        | SIRS        |
+|------------------------|------------|------------|
+| Peak infectious        | ~594       | ~1048      |
+| Time to peak (days)    | 273        | 159        |
+| Final susceptible      | ~81,053    | ~90,710    |
+| Final infectious       | ~503       | ~184       |
+| Final recovered        | ~18,120    | ~9,107     |
+
+---
+
+### Interpretation
+
+* **SIRS produces:**
+  * higher and earlier epidemic peak  
+  * faster epidemic dynamics  
+  * sustained infection levels over time  
+
+* **SEIR produces:**
+  * slower epidemic progression  
+  * lower peak  
+  * long-lasting depletion of susceptibles  
+
+---
+
+### Key differences
+
+#### 1. Epidemic timing
+
+* SIRS peaks **much earlier (159 days)**  
+* SEIR peaks **much later (273 days)**  
+
+→ Indicates that **waning immunity accelerates transmission cycles**
+
+---
+
+#### 2. Peak size
+
+* SIRS peak is nearly **2× larger than SEIR**
+
+→ Reinfection increases the number of infectious individuals  
+
+---
+
+#### 3. Long-term behaviour
+
+* SEIR:
+  * epidemic dies out  
+  * immunity is permanent  
+
+* SIRS:
+  * infection persists at low levels  
+  * susceptible population is replenished  
+
+---
+
+### Epidemiological relevance
+
+* Influenza is **not permanently immunising**
+* Immunity wanes over time
+* Antigenic drift allows reinfection  
+
+→ Therefore, **SIRS is more realistic for influenza modelling**
+
+---
+
+### Key insight
+
+* Adding waning immunity fundamentally changes epidemic dynamics  
+
+* SIRS better captures:
+  * repeated outbreaks  
+  * sustained transmission  
+  * realistic influenza behaviour  
+
+---
+
+### Conclusion
+
+* SEIR is useful for:
+  * single-wave epidemic modelling  
+  * short-term outbreak dynamics  
+
+* SIRS is more appropriate for:
+  * long-term influenza modelling  
+  * seasonal and recurring epidemics  
+
+
+---
+
+### Conclusion
+
+* Comparing SEIR and SIRS highlights the importance of immunity assumptions in epidemic modelling
+* The SIRS model provides a more realistic conceptual framework for influenza persistence
+* The SEIR model remains useful for analysing early epidemic growth and short-term wave dynamics
 ---
 
 ## Reproducibility
