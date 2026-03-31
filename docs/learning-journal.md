@@ -884,3 +884,141 @@ To connect the mechanistic SEIR model with real influenza surveillance data and 
   6. Compare theory with observed epidemic behaviour  
 
 ---
+
+## Sensitivity Analysis of SEIR Model
+
+### Objective
+
+To evaluate how changes in key epidemiological parameters influence the behaviour of the SEIR model and assess the robustness of model predictions.
+
+---
+
+### Completed
+
+* Performed one-way sensitivity analysis on the SEIR model
+* Used fitted parameters from the **2022–2023 growth phase**
+* Varied key parameters:
+  * β (transmission rate)
+  * latent period
+  * infectious period  
+
+* Simulated epidemic trajectories for each scenario
+* Computed summary metrics:
+  * peak infectious population  
+  * time to peak  
+  * final epidemic size  
+
+---
+
+### Methodological approach
+
+* Each parameter was varied independently while holding others constant  
+* Parameter ranges:
+  * β: ±20% around fitted value  
+  * latent period: 1–5 days  
+  * infectious period: 2–6 days  
+
+* Used deterministic SEIR model to simulate epidemic dynamics over time  
+
+---
+
+### Results
+
+* β variation:
+  * strong impact on epidemic size and speed  
+  * higher β → larger and faster epidemics  
+
+* Latent period variation:
+  * longer latent period → slower epidemic  
+  * reduced peak and final size  
+
+* Infectious period variation:
+  * longer infectious period → very large increase in peak infections  
+  * earlier peaks and significantly larger epidemic size  
+
+---
+
+### Observations
+
+* Epidemic dynamics are highly sensitive to:
+  * transmission rate  
+  * infectious duration  
+
+* Small parameter changes can lead to:
+  * large differences in epidemic outcomes  
+
+* Latent period mainly affects:
+  * timing and delay of transmission  
+  * rather than magnitude  
+
+---
+
+### Interpretation
+
+* β controls:
+  * how quickly infections spread  
+
+* Infectious period controls:
+  * how long individuals contribute to transmission  
+
+* Latent period controls:
+  * delay between exposure and infectiousness  
+
+---
+
+### Key insight
+
+* Epidemic models are highly sensitive to parameter assumptions  
+
+* In particular:
+  * small increases in β or infectious period  
+    → can lead to disproportionately large epidemics  
+
+* This highlights the importance of:
+  * accurate parameter estimation  
+  * understanding uncertainty in model inputs  
+
+---
+
+### Conceptual understanding
+
+* SEIR model behaviour depends on:
+  * interaction between transmission (β), progression (σ), and recovery (γ)
+
+* Epidemic size and timing are emergent properties of:
+  * these interacting parameters  
+
+* Sensitivity analysis helps identify:
+  * which parameters dominate model behaviour  
+
+---
+
+### Limitations
+
+* One-way sensitivity analysis only (no interaction effects)
+* Deterministic model (no stochastic variation)
+* No seasonal forcing
+* Parameter ranges are assumed, not estimated from uncertainty distributions  
+
+---
+
+### Learning outcome
+
+* Developed understanding of:
+  * how model parameters influence epidemic behaviour  
+  * which parameters are most critical  
+
+* Recognised that:
+  * model predictions are highly dependent on parameter values  
+
+* Gained insight into:
+  * robustness and uncertainty in epidemiological modelling  
+
+---
+
+### Next steps
+
+* Extend to multi-parameter sensitivity analysis  
+* Incorporate uncertainty ranges for parameters  
+* Explore seasonal SEIR model  
+* Compare sensitivity results with SIRS model dynamics  

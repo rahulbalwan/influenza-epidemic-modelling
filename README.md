@@ -318,6 +318,121 @@ source("run_all.R")
   * sensitivity analysis  
   * more realistic epidemic modelling frameworks  
 ---
+
+## Key findings: (SEIR sensitivity analysis)
+
+* A one-way sensitivity analysis was performed using the **fitted SEIR model parameters** from the **2022–2023 growth phase**.
+
+* The analysis examined how variation in key epidemiological parameters affects epidemic dynamics.
+
+---
+
+### Parameters explored
+
+* Transmission rate (β)  
+* Latent period (1–5 days)  
+* Infectious period (2–6 days)  
+
+* Each parameter was varied independently while keeping others fixed.
+
+---
+
+### Metrics evaluated
+
+* Peak infectious population  
+* Time to peak (days)  
+* Final epidemic size (total recovered population)  
+
+---
+
+### Effects of transmission rate (β)
+
+* Increasing β leads to:
+  * higher peak infections  
+  * faster epidemics (earlier peak)  
+  * larger final epidemic size  
+
+* At low β (~0.32):
+  * epidemic barely grows  
+
+* At higher β (~0.48):
+  * rapid and large epidemic occurs  
+
+---
+
+### Effects of latent period
+
+* Increasing latent period results in:
+  * slower epidemic growth  
+  * delayed peak timing  
+  * reduced peak infectious population  
+  * smaller final epidemic size  
+
+---
+
+### Effects of infectious period
+
+* Increasing infectious period leads to:
+  * significantly higher peak infections  
+  * earlier epidemic peaks  
+  * much larger epidemic size  
+
+* Small increases in infectious duration produce:
+  * disproportionately large changes in epidemic outcomes  
+
+---
+
+### Interpretation
+
+* The SEIR model is most sensitive to:
+  * transmission rate (β)  
+  * infectious period  
+
+* The latent period primarily affects:
+  * timing and speed of the epidemic  
+  * rather than overall magnitude  
+
+---
+
+### Key insight
+
+* Epidemic outcomes are highly sensitive to parameter values  
+
+* In particular:
+  * small increases in transmission or infectious duration  
+    → can lead to large increases in epidemic size  
+
+* This highlights the importance of:
+  * accurate parameter estimation  
+  * understanding uncertainty in model inputs  
+
+---
+
+### Public health implication
+
+* Reducing β (through interventions such as distancing or vaccination) can:
+  * substantially reduce epidemic size  
+
+* Reducing infectious period (through isolation or treatment) can:
+  * significantly limit transmission  
+
+---
+
+### Conclusion
+
+* Sensitivity analysis confirms that:
+  * SEIR model behaviour is strongly driven by a small number of key parameters  
+
+* It provides insight into:
+  * which parameters matter most  
+  * how uncertainty affects predictions  
+
+* This strengthens confidence in:
+  * model interpretation  
+  * and guides future model extensions  
+
+---
+
 ## Conceptual insight (Overall):
 
 * The dataset represents a **sequence of repeated epidemic processes**, rather than a single continuous time series  
