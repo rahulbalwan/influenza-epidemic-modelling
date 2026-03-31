@@ -1246,3 +1246,122 @@ To evaluate how different epidemiological assumptions (permanent vs waning immun
   * **SIRS is the more appropriate modelling framework**  
 
 ---
+
+## Seasonal Forcing Extension
+
+### What I did
+
+* Extended the SIRS model by introducing **time-varying transmission β(t)**
+* Implemented seasonal forcing using a cosine function
+* Simulated long-term epidemic dynamics over multiple years  
+
+---
+
+### What I learned
+
+* Real epidemic data (2015–2026) shows:
+  * repeated seasonal waves  
+  * not a single epidemic  
+
+* This cannot be explained by:
+  * SEIR → lacks recurrence  
+  * basic SIRS → lacks timing  
+
+---
+
+### Key concepts
+
+* Transmission is not constant:
+
+  * β = β(t), not β = constant  
+
+* Seasonal forcing is essential for diseases like influenza  
+
+---
+
+### Understanding the mechanism
+
+* Epidemic waves arise from interaction of:
+
+  1. Seasonal increase in β(t)
+  2. Build-up of susceptible individuals (via waning immunity)
+
+* This creates a **cycle**:
+
+  * low transmission → susceptibles accumulate  
+  * winter → transmission increases → outbreak  
+  * recovery → immunity increases → decline  
+  * immunity wanes → next wave possible  
+
+---
+
+### Insight from plots
+
+* β(t) shows clear yearly oscillation  
+* Infectious curve follows seasonal pattern  
+* Multiple epidemic peaks emerge naturally  
+
+---
+
+### Why this matters
+
+* This model aligns with real-world influenza epidemiology:
+
+  * winter peaks  
+  * annual cycles  
+  * recurring outbreaks  
+
+* It demonstrates how:
+
+  * mechanistic models + realistic assumptions  
+  → can reproduce observed data patterns  
+
+---
+
+### Key takeaway
+
+* The most realistic influenza model in this project is:
+
+  → **Seasonally forced SIRS model**
+
+* It integrates:
+
+  * transmission dynamics (β)  
+  * recovery (γ)  
+  * waning immunity (ω)  
+  * environmental forcing (seasonality)  
+
+---
+
+### Next steps
+
+* Fit seasonal model to full dataset (2015–2026)
+* Estimate seasonal amplitude (α) from data
+* Compare predicted vs observed multi-year trends
+* Explore stochastic models for variability  
+
+---
+
+## Overall Project Insight (Final)
+
+* Influenza is not a single epidemic:
+  * it is a **recurrent seasonal process**
+
+* Proper modelling requires:
+
+  * time-varying transmission  
+  * immune waning  
+  * multi-year simulation  
+
+* Model progression in this project:
+
+  1. Growth rate (r) → early dynamics  
+  2. SEIR → mechanistic single-wave model  
+  3. SIRS → recurrent dynamics  
+  4. Seasonal SIRS → realistic influenza model  
+
+* Final understanding:
+
+  → Epidemic patterns emerge from **mechanisms + environment**, not just data  
+
+---

@@ -602,6 +602,130 @@ The models were compared using:
 * The SEIR model remains useful for analysing early epidemic growth and short-term wave dynamics
 ---
 
+## Seasonal SIRS Model (Time-Varying Transmission)
+
+### Objective
+
+To extend the SIRS model by incorporating **seasonal forcing** in transmission and evaluate whether it can reproduce **recurrent influenza epidemic patterns** observed in long-term data (2015–2026).
+
+---
+
+### Model formulation
+
+* The transmission rate was made time-dependent:
+
+  * β(t) = β₀ × (1 + α cos(2πt / 365))
+
+* This captures:
+  * higher transmission in winter
+  * lower transmission in summer
+
+---
+
+### Completed
+
+* Implemented **seasonally forced SIRS model**
+* Used fitted β₀ from SEIR growth-phase model
+* Added **waning immunity (SIRS structure)**
+* Simulated epidemic dynamics over multiple years (~3 years)
+
+---
+
+### Parameters
+
+* β₀ ≈ 0.402  
+* α = 0.25 (seasonal amplitude)  
+* γ = 1/3 (infectious period = 3 days)  
+* ω ≈ 0.00274 (immunity duration ≈ 1 year)  
+
+---
+
+### Results
+
+* Peak infectious population:
+  * ≈ 5057 individuals  
+
+* Time to peak:
+  * ≈ 1088 days (~3 years)
+
+* Final state:
+  * Susceptible ≈ 56,324  
+  * Infectious ≈ 4,155  
+  * Recovered ≈ 39,522  
+
+---
+
+### Key observations
+
+* The model produces **recurrent epidemic waves**
+* Epidemics are driven by:
+  * seasonal increase in β(t)
+  * replenishment of susceptibles via waning immunity
+
+* Multiple peaks emerge naturally without forcing external shocks  
+
+---
+
+### Interpretation
+
+* Compared to SEIR and basic SIRS:
+
+  * SEIR:
+    * single epidemic wave  
+    * no long-term dynamics  
+
+  * SIRS:
+    * allows repeated outbreaks  
+    * but lacks seasonal timing  
+
+  * Seasonal SIRS:
+    * reproduces **realistic influenza patterns**
+    * aligns with observed yearly cycles  
+
+---
+
+### Key insight
+
+* Influenza dynamics are driven by the combination of:
+  * **seasonal transmission variation**
+  * **waning immunity**
+
+* Neither SEIR nor SIRS alone is sufficient:
+  * SEIR → no recurrence  
+  * SIRS → no seasonality  
+
+* Seasonal SIRS provides:
+  * the most realistic mechanistic explanation  
+
+---
+
+### Limitations
+
+* Parameters not fitted to full time series
+* Seasonal amplitude (α) chosen heuristically
+* No stochasticity
+* No age structure or contact heterogeneity
+* No explicit observation/reporting model  
+
+---
+
+### Conclusion
+
+* The seasonal SIRS model successfully captures:
+
+  * repeated epidemic waves  
+  * seasonal timing of outbreaks  
+  * long-term influenza dynamics  
+
+* This model represents a major improvement over:
+  * SEIR (single-wave)
+  * SIRS (non-seasonal)
+
+---
+
+
+
+
 ## Reproducibility
 
 The project is designed with reproducibility in mind:
