@@ -193,7 +193,7 @@ Seasonal SIRS → realistic cycles
 
 ## Dashboard
 
-An interactive **Shiny dashboard** is included.
+An interactive **Shiny dashboard** will be included.
 
 Features:
 - EDA visualisations  
