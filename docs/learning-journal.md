@@ -1449,15 +1449,15 @@ To build an interactive Shiny dashboard that presents the main results of the pr
 
 ## Interpretation
 
-The dashboard changed the project from a purely script-based workflow into an interactive analytical product.
+The dashboard will change the project from a purely script-based workflow into an interactive analytical product.
 
-This mattered because it allowed results to be:
+This matters because it will allow results to be:
 
 - explored visually
 - communicated more clearly
 - connected across analysis stages
 
-It also made me think differently about presentation. A dashboard forces you to decide:
+A dashboard forces you to decide:
 
 - what the most important outputs are
 - how a user navigates results
@@ -1479,7 +1479,7 @@ This stage also reinforced the importance of:
 
 ## Outcome
 
-The dashboard became a final integration layer for the project, connecting data analysis, modelling, interpretation, and presentation in one place.
+The dashboard will be a final integration layer for the project, connecting data analysis, modelling, interpretation, and presentation in one place.
 
 ---
 
