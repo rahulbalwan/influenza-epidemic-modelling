@@ -2,7 +2,7 @@
 
 ## Data source
 
-World Health Organization (WHO) (2026) *FluNet – Global Influenza Surveillance*. Available at: https://www.who.int/tools/flunet (Accessed: 31 March 2026).
+World Health Organization (WHO) (2026) *FluNet – Global Influenza Surveillance*. Available at: https://www.who.int/tools/flunet (Accessed: 18 March 2026).
 
 ---
 
@@ -32,7 +32,7 @@ Wallinga, J. and Lipsitch, M. (2007) ‘How generation intervals shape the relat
 
 ## Influenza epidemiology
 
-Centers for Disease Control and Prevention (CDC) (2026) *Influenza (Flu)*. Available at: https://www.cdc.gov/flu (Accessed: 12 March 2026).
+Centers for Disease Control and Prevention (CDC) (2026) *Influenza (Flu)*. Available at: https://www.cdc.gov/flu (Accessed: 18 March 2026).
 
 European Centre for Disease Prevention and Control (ECDC) (2026) *Seasonal Influenza Surveillance*. Available at: https://www.ecdc.europa.eu (Accessed: 12 March 2026).
 
