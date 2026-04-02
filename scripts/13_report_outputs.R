@@ -1,5 +1,5 @@
 # 14_make_report_outputs.R
-# This script gathers the final tables and figures.
+# This script gathers the final tables and figures for report
 
 
 # Load necessary libraries
